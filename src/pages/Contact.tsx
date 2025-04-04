@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import GoogleMap from "@/components/GoogleMap";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -241,21 +242,47 @@ const Contact = () => {
             </p>
           </div>
           
-          <div className="bg-gray-300 h-96 rounded-lg overflow-hidden">
-            {/* Placeholder for an actual map */}
-            <div className="w-full h-full flex items-center justify-center bg-gray-200">
-              <p className="text-gray-500 text-lg font-medium">Map Placeholder</p>
-            </div>
+          <div className="bg-white h-96 rounded-lg overflow-hidden shadow-lg">
+            <GoogleMap 
+              height="384px"
+              center={{ lat: 37.7749, lng: -122.4194 }}
+              markerTitle="TechNex San Francisco"
+              zoom={15}
+            />
           </div>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
             {[
-              { city: "San Francisco", country: "USA", address: "123 Tech Park, CA 94025" },
-              { city: "New York", country: "USA", address: "456 Broadway, NY 10013" },
-              { city: "London", country: "UK", address: "78 Tech Square, London EC1V 9BX" },
-              { city: "Singapore", country: "Singapore", address: "90 Fintech Center, Singapore 049315" }
+              { 
+                city: "San Francisco", 
+                country: "USA", 
+                address: "123 Tech Park, CA 94025",
+                position: { lat: 37.7749, lng: -122.4194 }
+              },
+              { 
+                city: "New York", 
+                country: "USA", 
+                address: "456 Broadway, NY 10013",
+                position: { lat: 40.7128, lng: -74.0060 }
+              },
+              { 
+                city: "London", 
+                country: "UK", 
+                address: "78 Tech Square, London EC1V 9BX",
+                position: { lat: 51.5074, lng: -0.1278 }
+              },
+              { 
+                city: "Singapore", 
+                country: "Singapore", 
+                address: "90 Fintech Center, Singapore 049315",
+                position: { lat: 1.3521, lng: 103.8198 }
+              }
             ].map((location, index) => (
-              <div key={index} className="bg-white p-4 rounded-lg shadow-md">
+              <div 
+                key={index} 
+                className="bg-white p-4 rounded-lg shadow-md cursor-pointer hover:shadow-lg transition-shadow"
+                onClick={() => document.querySelector('.map-wrapper')?.scrollIntoView({ behavior: 'smooth' })}
+              >
                 <h3 className="font-semibold text-lg">{location.city}</h3>
                 <p className="text-gray-500">{location.country}</p>
                 <p className="text-gray-600 mt-2">{location.address}</p>
