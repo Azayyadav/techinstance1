@@ -20,6 +20,7 @@ interface GoogleMapProps {
   zoom?: number;
   markerTitle?: string;
   height?: string;
+  onMapClick?: (location: { lat: number; lng: number }) => void;
 }
 
 const MapComponent: React.FC<GoogleMapProps> = ({
@@ -27,11 +28,12 @@ const MapComponent: React.FC<GoogleMapProps> = ({
   zoom = 14,
   markerTitle = "TechNex Headquarters",
   height,
+  onMapClick,
 }) => {
   // Load the Google Maps JavaScript API
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
-    googleMapsApiKey: "YOUR_API_KEY", // Replace with your Google Maps API key or use an environment variable
+    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "YOUR_API_KEY", // Use environment variable or fallback
   });
 
   const mapStyles = {
@@ -51,8 +53,29 @@ const MapComponent: React.FC<GoogleMapProps> = ({
     );
   }
 
+  const handleMapClick = (e: google.maps.MapMouseEvent) => {
+    if (onMapClick && e.latLng) {
+      onMapClick({
+        lat: e.latLng.lat(),
+        lng: e.latLng.lng(),
+      });
+    }
+  };
+
   return (
-    <GoogleMap mapContainerStyle={mapStyles} center={center} zoom={zoom}>
+    <GoogleMap 
+      mapContainerStyle={mapStyles} 
+      center={center} 
+      zoom={zoom}
+      onClick={handleMapClick}
+      options={{
+        disableDefaultUI: false,
+        zoomControl: true,
+        streetViewControl: false,
+        mapTypeControl: false,
+        fullscreenControl: true,
+      }}
+    >
       <Marker position={center} title={markerTitle} />
     </GoogleMap>
   );

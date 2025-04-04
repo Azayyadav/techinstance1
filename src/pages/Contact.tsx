@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { MapPin, Phone, Mail, MessageSquare, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -7,6 +6,34 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import GoogleMap from "@/components/GoogleMap";
+
+// Office locations data
+const officeLocations = [
+  { 
+    city: "San Francisco", 
+    country: "USA", 
+    address: "123 Tech Park, CA 94025",
+    position: { lat: 37.7749, lng: -122.4194 }
+  },
+  { 
+    city: "New York", 
+    country: "USA", 
+    address: "456 Broadway, NY 10013",
+    position: { lat: 40.7128, lng: -74.0060 }
+  },
+  { 
+    city: "London", 
+    country: "UK", 
+    address: "78 Tech Square, London EC1V 9BX",
+    position: { lat: 51.5074, lng: -0.1278 }
+  },
+  { 
+    city: "Singapore", 
+    country: "Singapore", 
+    address: "90 Fintech Center, Singapore 049315",
+    position: { lat: 1.3521, lng: 103.8198 }
+  }
+];
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -46,6 +73,18 @@ const Contact = () => {
         message: ""
       });
     }, 1500);
+  };
+  
+  // Add state for the selected location
+  const [selectedLocation, setSelectedLocation] = useState(officeLocations[0]);
+
+  const handleLocationSelect = (location: typeof officeLocations[0]) => {
+    setSelectedLocation(location);
+    // Smooth scroll to map
+    document.querySelector('.map-wrapper')?.scrollIntoView({ 
+      behavior: 'smooth',
+      block: 'center'
+    });
   };
   
   return (
@@ -242,46 +281,23 @@ const Contact = () => {
             </p>
           </div>
           
-          <div className="bg-white h-96 rounded-lg overflow-hidden shadow-lg">
+          <div className="bg-white h-96 rounded-lg overflow-hidden shadow-lg map-wrapper">
             <GoogleMap 
               height="384px"
-              center={{ lat: 37.7749, lng: -122.4194 }}
-              markerTitle="TechNex San Francisco"
+              center={selectedLocation.position}
+              markerTitle={`TechNex ${selectedLocation.city}`}
               zoom={15}
             />
           </div>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
-            {[
-              { 
-                city: "San Francisco", 
-                country: "USA", 
-                address: "123 Tech Park, CA 94025",
-                position: { lat: 37.7749, lng: -122.4194 }
-              },
-              { 
-                city: "New York", 
-                country: "USA", 
-                address: "456 Broadway, NY 10013",
-                position: { lat: 40.7128, lng: -74.0060 }
-              },
-              { 
-                city: "London", 
-                country: "UK", 
-                address: "78 Tech Square, London EC1V 9BX",
-                position: { lat: 51.5074, lng: -0.1278 }
-              },
-              { 
-                city: "Singapore", 
-                country: "Singapore", 
-                address: "90 Fintech Center, Singapore 049315",
-                position: { lat: 1.3521, lng: 103.8198 }
-              }
-            ].map((location, index) => (
+            {officeLocations.map((location, index) => (
               <div 
                 key={index} 
-                className="bg-white p-4 rounded-lg shadow-md cursor-pointer hover:shadow-lg transition-shadow"
-                onClick={() => document.querySelector('.map-wrapper')?.scrollIntoView({ behavior: 'smooth' })}
+                className={`bg-white p-4 rounded-lg shadow-md cursor-pointer hover:shadow-lg transition-shadow ${
+                  selectedLocation.city === location.city ? 'ring-2 ring-it-blue border-it-blue-light' : ''
+                }`}
+                onClick={() => handleLocationSelect(location)}
               >
                 <h3 className="font-semibold text-lg">{location.city}</h3>
                 <p className="text-gray-500">{location.country}</p>
