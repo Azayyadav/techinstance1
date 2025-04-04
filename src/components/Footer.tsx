@@ -11,7 +11,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Company Info */}
           <div>
-            <h3 className="text-2xl font-bold mb-6">TechNex</h3>
+            <h3 className="text-2xl font-bold mb-6">Tech Instance</h3>
             <p className="text-gray-300 mb-6">
               Delivering innovative IT solutions that drive business transformation and growth.
             </p>
@@ -123,7 +123,7 @@ const Footer = () => {
         <div className="border-t border-gray-700 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-400 text-sm">
-              &copy; {currentYear} TechNex. All rights reserved.
+              &copy; {currentYear} Tech Instance. All rights reserved.
             </p>
             <div className="mt-4 md:mt-0">
               <ul className="flex space-x-6">

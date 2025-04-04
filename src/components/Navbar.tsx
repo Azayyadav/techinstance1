@@ -77,7 +77,7 @@ const Navbar = () => {
             to="/" 
             className="flex items-center space-x-2"
           >
-            <span className="text-2xl font-bold text-it-blue-dark">TechNex</span>
+            <span className="text-2xl font-bold text-it-blue-dark">Tech Instance</span>
           </Link>
 
           {/* Desktop Navigation */}
