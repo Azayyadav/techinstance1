@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { LogOut, Users, Briefcase, PlusCircle } from "lucide-react";
+import { LogOut, Users, Briefcase, PlusCircle, Award } from "lucide-react";
 import { mockApplications, mockJobListings } from "@/data/mockData";
 
 const AdminDashboard = () => {
@@ -66,7 +66,7 @@ const AdminDashboard = () => {
           </Button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium">
@@ -97,6 +97,19 @@ const AdminDashboard = () => {
               <div className="text-3xl font-bold">
                 {applications.filter(app => app.jobType === "Internship").length}
               </div>
+            </CardContent>
+          </Card>
+          <Card
+            className="cursor-pointer bg-it-blue text-white hover:bg-it-blue-dark transition-colors"
+            onClick={() => navigate("/admin/certificates")}
+          >
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium flex items-center">
+                <Award className="mr-2 h-5 w-5" /> Certificate Management
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-lg font-bold">Manage Intern Certificates</div>
             </CardContent>
           </Card>
         </div>
