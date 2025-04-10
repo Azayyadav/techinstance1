@@ -12,7 +12,8 @@ import {
   Cpu,
   PenTool,
   Building,
-  Users
+  Users,
+  GraduationCap
 } from "lucide-react";
 
 const Navbar = () => {
@@ -60,7 +61,15 @@ const Navbar = () => {
         { name: "Retail", path: "/industries/retail", icon: Globe },
       ]
     },
-    { name: "Careers", path: "/careers" },
+    { 
+      name: "Careers", 
+      path: "/careers",
+      dropdown: true,
+      items: [
+        { name: "Full-time Positions", path: "/careers", icon: Briefcase },
+        { name: "Internships", path: "/internships", icon: GraduationCap },
+      ]
+    },
     { name: "Contact", path: "/contact" }
   ];
 

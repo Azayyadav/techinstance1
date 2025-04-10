@@ -10,8 +10,10 @@ import About from "./pages/About";
 import Services from "./pages/Services";
 import Industries from "./pages/Industries";
 import Careers from "./pages/Careers";
-import Contact from "./pages/Contact";
+import Internships from "./pages/Internships";
 import ContactPage from "./pages/ContactPage";
+import AdminLogin from "./pages/AdminLogin";
+import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -33,7 +35,10 @@ const App = () => (
               <Route path="/services" element={<Services />} />
               <Route path="/industries" element={<Industries />} />
               <Route path="/careers" element={<Careers />} />
+              <Route path="/internships" element={<Internships />} />
               <Route path="/contact" element={<ContactPage />} />
+              <Route path="/admin" element={<AdminLogin />} />
+              <Route path="/admin/dashboard" element={<AdminDashboard />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
