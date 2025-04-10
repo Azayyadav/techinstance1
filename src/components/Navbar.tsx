@@ -13,7 +13,8 @@ import {
   PenTool,
   Building,
   Users,
-  GraduationCap
+  GraduationCap,
+  Briefcase
 } from "lucide-react";
 
 const Navbar = () => {
