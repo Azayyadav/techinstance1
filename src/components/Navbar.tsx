@@ -14,7 +14,8 @@ import {
   Building,
   Users,
   GraduationCap,
-  Briefcase
+  Briefcase,
+  ShieldCheck
 } from "lucide-react";
 
 const Navbar = () => {
@@ -71,7 +72,8 @@ const Navbar = () => {
         { name: "Internships", path: "/internships", icon: GraduationCap },
       ]
     },
-    { name: "Contact", path: "/contact" }
+    { name: "Contact", path: "/contact" },
+    { name: "Admin", path: "/admin", icon: ShieldCheck }
   ];
 
   return (
@@ -200,3 +202,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
