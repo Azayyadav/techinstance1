@@ -49,25 +49,13 @@ const Certificate: React.FC<CertificateProps> = ({
         {/* Header with small thumbnails */}
         <div className="flex justify-between mb-10">
           <div className="w-20 h-20 bg-gray-100 p-1">
-            {companyLogo ? (
-              <img src={companyLogo} alt="Certificate thumbnail" className="w-full h-full object-contain" />
-            ) : (
-              <img 
-                src="/lovable-uploads/481af989-10e6-4895-9bfe-7723e7f899a3.png" 
-                alt="Certificate thumbnail" 
-                className="w-full h-full object-contain" 
-              />
+            {companyLogo && (
+              <img src={companyLogo} alt="Company logo" className="w-full h-full object-contain" />
             )}
           </div>
           <div className="w-20 h-20 bg-gray-100 p-1">
-            {companyLogo ? (
-              <img src={companyLogo} alt="Certificate thumbnail" className="w-full h-full object-contain" />
-            ) : (
-              <img 
-                src="/lovable-uploads/481af989-10e6-4895-9bfe-7723e7f899a3.png" 
-                alt="Certificate thumbnail" 
-                className="w-full h-full object-contain" 
-              />
+            {companyLogo && (
+              <img src={companyLogo} alt="Company logo" className="w-full h-full object-contain" />
             )}
           </div>
         </div>
@@ -99,14 +87,8 @@ const Certificate: React.FC<CertificateProps> = ({
         <div className="flex justify-between items-end mt-16">
           {/* Left Thumbnail */}
           <div className="w-20 h-20 bg-gray-100 p-1">
-            {companyLogo ? (
-              <img src={companyLogo} alt="Certificate thumbnail" className="w-full h-full object-contain" />
-            ) : (
-              <img 
-                src="/lovable-uploads/481af989-10e6-4895-9bfe-7723e7f899a3.png" 
-                alt="Certificate thumbnail" 
-                className="w-full h-full object-contain" 
-              />
+            {companyLogo && (
+              <img src={companyLogo} alt="Company logo" className="w-full h-full object-contain" />
             )}
           </div>
           
