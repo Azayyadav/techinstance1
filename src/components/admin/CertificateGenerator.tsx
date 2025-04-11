@@ -23,6 +23,7 @@ const CertificateGenerator = () => {
   });
   const [showCertificate, setShowCertificate] = useState(false);
   const [signatureImage, setSignatureImage] = useState<string | undefined>(undefined);
+  const [companyLogo, setCompanyLogo] = useState<string | undefined>(undefined);
   const { toast } = useToast();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -102,6 +103,25 @@ const CertificateGenerator = () => {
     }
   };
 
+  const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      
+      reader.onload = (event) => {
+        if (event.target && typeof event.target.result === 'string') {
+          setCompanyLogo(event.target.result);
+          toast({
+            title: "Logo uploaded",
+            description: "Company logo has been successfully uploaded."
+          });
+        }
+      };
+      
+      reader.readAsDataURL(file);
+    }
+  };
+
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     const options: Intl.DateTimeFormatOptions = { 
@@ -123,44 +143,90 @@ const CertificateGenerator = () => {
             handleSubmit={handleSubmit}
           />
           
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <h3 className="text-lg font-medium mb-4">Upload Signature Image</h3>
-            <div className="flex items-center gap-4">
-              <div className="w-full max-w-xs">
-                <Label htmlFor="signature-upload" className="block mb-2">Choose signature image</Label>
-                <div className="flex items-center gap-3">
-                  <input
-                    id="signature-upload"
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={handleSignatureUpload}
-                  />
-                  <Button 
-                    type="button" 
-                    variant="outline"
-                    onClick={() => document.getElementById('signature-upload')?.click()}
-                    className="w-full"
-                  >
-                    <Upload className="mr-2 h-4 w-4" />
-                    Select File
-                  </Button>
-                  
-                  <div className="border rounded-md h-16 w-32 flex items-center justify-center bg-gray-50">
-                    {signatureImage ? (
-                      <img 
-                        src={signatureImage} 
-                        alt="Signature Preview" 
-                        className="max-h-14 max-w-28"
-                      />
-                    ) : (
-                      <p className="text-xs text-gray-400">No signature</p>
-                    )}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Company Logo Upload */}
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <h3 className="text-lg font-medium mb-4">Upload Company Logo</h3>
+              <div className="flex items-center gap-4">
+                <div className="w-full">
+                  <Label htmlFor="logo-upload" className="block mb-2">Choose company logo</Label>
+                  <div className="flex items-center gap-3">
+                    <input
+                      id="logo-upload"
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={handleLogoUpload}
+                    />
+                    <Button 
+                      type="button" 
+                      variant="outline"
+                      onClick={() => document.getElementById('logo-upload')?.click()}
+                      className="w-1/3"
+                    >
+                      <Upload className="mr-2 h-4 w-4" />
+                      Select File
+                    </Button>
+                    
+                    <div className="border rounded-md h-24 w-24 flex items-center justify-center bg-gray-50">
+                      {companyLogo ? (
+                        <img 
+                          src={companyLogo} 
+                          alt="Logo Preview" 
+                          className="max-h-20 max-w-20 object-contain"
+                        />
+                      ) : (
+                        <p className="text-xs text-gray-400">No logo</p>
+                      )}
+                    </div>
                   </div>
+                  <p className="text-xs text-gray-500 mt-2">
+                    Recommended: PNG with transparent background
+                  </p>
                 </div>
-                <p className="text-xs text-gray-500 mt-2">
-                  Recommended: Transparent PNG with black signature on transparent background
-                </p>
+              </div>
+            </div>
+
+            {/* Signature Upload */}
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <h3 className="text-lg font-medium mb-4">Upload Signature Image</h3>
+              <div className="flex items-center gap-4">
+                <div className="w-full">
+                  <Label htmlFor="signature-upload" className="block mb-2">Choose signature image</Label>
+                  <div className="flex items-center gap-3">
+                    <input
+                      id="signature-upload"
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={handleSignatureUpload}
+                    />
+                    <Button 
+                      type="button" 
+                      variant="outline"
+                      onClick={() => document.getElementById('signature-upload')?.click()}
+                      className="w-1/3"
+                    >
+                      <Upload className="mr-2 h-4 w-4" />
+                      Select File
+                    </Button>
+                    
+                    <div className="border rounded-md h-24 w-36 flex items-center justify-center bg-gray-50">
+                      {signatureImage ? (
+                        <img 
+                          src={signatureImage} 
+                          alt="Signature Preview" 
+                          className="max-h-20 max-w-32 object-contain"
+                        />
+                      ) : (
+                        <p className="text-xs text-gray-400">No signature</p>
+                      )}
+                    </div>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-2">
+                    Recommended: Transparent PNG with black signature
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -187,6 +253,7 @@ const CertificateGenerator = () => {
               signatoryName={formData.signatoryName}
               signatoryPosition={formData.signatoryPosition}
               signatureImage={signatureImage}
+              companyLogo={companyLogo}
             />
           </div>
         </div>

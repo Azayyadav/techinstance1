@@ -14,6 +14,7 @@ interface CertificateProps {
   signatoryName: string;
   signatoryPosition: string;
   signatureImage?: string;
+  companyLogo?: string;
 }
 
 const Certificate: React.FC<CertificateProps> = ({
@@ -27,7 +28,8 @@ const Certificate: React.FC<CertificateProps> = ({
   duration,
   signatoryName,
   signatoryPosition,
-  signatureImage
+  signatureImage,
+  companyLogo
 }) => {
   // Create a properly formatted verification URL for the QR code
   const baseUrl = window.location.origin;
@@ -35,59 +37,75 @@ const Certificate: React.FC<CertificateProps> = ({
   
   return (
     <div className="w-full max-w-4xl mx-auto bg-white relative certificate-container">
-      {/* Modern blue gradient background with angled sections */}
+      {/* Background with blue corners */}
       <div className="absolute inset-0 overflow-hidden">
-        {/* Top and bottom gradient */}
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600"></div>
+        {/* White background with subtle pattern */}
+        <div className="absolute inset-0 bg-white" 
+             style={{backgroundImage: 'repeating-linear-gradient(45deg, #f9fafb, #f9fafb 10px, #ffffff 10px, #ffffff 20px)'}}></div>
         
-        {/* White center */}
-        <div className="absolute top-[40px] bottom-[40px] left-[40px] right-[40px] bg-white"></div>
-        
-        {/* Angled corners */}
-        <div className="absolute left-0 bottom-0 w-[300px] h-[300px] bg-blue-400 opacity-80" style={{ clipPath: 'polygon(0 60%, 0% 100%, 100% 100%)' }}></div>
-        <div className="absolute right-0 top-0 w-[300px] h-[300px] bg-blue-400 opacity-80" style={{ clipPath: 'polygon(100% 0, 100% 40%, 40% 0)' }}></div>
+        {/* Blue corners */}
+        <div className="absolute left-0 bottom-0 h-56 w-56" 
+             style={{background: 'linear-gradient(135deg, transparent 50%, #2563eb 50%)'}}></div>
+        <div className="absolute right-0 bottom-0 h-56 w-56" 
+             style={{background: 'linear-gradient(225deg, transparent 50%, #2563eb 50%)'}}></div>
+        <div className="absolute left-0 top-0 h-56 w-56" 
+             style={{background: 'linear-gradient(45deg, transparent 50%, #2563eb 50%)'}}></div>
+        <div className="absolute right-0 top-0 h-56 w-56" 
+             style={{background: 'linear-gradient(315deg, transparent 50%, #2563eb 50%)'}}></div>
       </div>
 
+      {/* Content */}
       <div className="relative z-10 p-10 m-2 border-0">
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex justify-between items-center mb-10">
           {/* Company Logo */}
-          <img 
-            src="/lovable-uploads/ca6c923e-b023-417a-b86b-be983f0ddc84.png" 
-            alt="Tech Instance Logo" 
-            className="h-20 w-auto" 
-          />
+          <div className="w-36 h-36 flex items-center justify-center">
+            {companyLogo ? (
+              <img 
+                src={companyLogo} 
+                alt="Company Logo" 
+                className="max-h-36 max-w-36 object-contain"
+              />
+            ) : (
+              <img 
+                src="/lovable-uploads/ca6c923e-b023-417a-b86b-be983f0ddc84.png" 
+                alt="Default Logo" 
+                className="max-h-36 max-w-36 object-contain" 
+              />
+            )}
+          </div>
           
           {/* Certificate Title */}
           <div className="text-center mx-6 flex-1">
-            <h1 className="text-6xl font-bold text-blue-600 tracking-wider">CERTIFICATE</h1>
-            <p className="text-xl text-blue-600 tracking-widest mt-1">OF COMPLETION</p>
+            <h1 className="text-6xl font-bold text-blue-700 tracking-wider">CERTIFICATE</h1>
+            <p className="text-xl text-blue-700 tracking-widest mt-1">OF COMPLETION</p>
           </div>
           
-          {/* Award Seal */}
-          <div className="relative w-20 h-20">
-            <div className="absolute inset-0 rounded-full bg-yellow-400 opacity-80"></div>
-            <div className="absolute inset-2 rounded-full border-2 border-yellow-600 flex items-center justify-center">
-              <span className="text-blue-900 font-bold text-xl">T/I</span>
-            </div>
-            <div className="absolute top-14 -right-2 w-10 h-14 bg-blue-600 opacity-80" style={{ clipPath: 'polygon(0 0, 100% 0, 100% 100%, 50% 70%, 0 100%)' }}></div>
+          {/* Gold Seal */}
+          <div className="w-32 h-32 relative">
+            <img 
+              src="/lovable-uploads/d3af46c7-4827-4a9d-8936-b82e88096949.png" 
+              alt="Gold Seal" 
+              className="w-32 h-auto"
+            />
           </div>
         </div>
         
         {/* Certificate text */}
         <div className="text-center mb-10">
           <p className="text-lg text-gray-700">This certificate is proudly presented to</p>
-          <h2 className="text-5xl font-bold text-gray-900 mt-5 mb-3 border-b-2 border-gray-200 pb-2 max-w-2xl mx-auto">{internName}</h2>
+          <h2 className="text-5xl font-bold text-gray-900 mt-5 mb-8">{internName}</h2>
+          <div className="border-b border-gray-300 w-4/5 mx-auto mb-8"></div>
         </div>
         
         <div className="text-center mb-12">
-          <p className="text-lg leading-relaxed max-w-3xl mx-auto">
+          <p className="text-lg leading-relaxed">
             for successfully completing a <span className="font-semibold">{duration}</span> internship from <span className="font-semibold">{startDate}</span>,
             to <span className="font-semibold">{endDate}</span>, in <span className="font-semibold">{internshipProgram}</span> at <span className="font-semibold">{companyName}</span>,
             showcasing commendable dedication and exceptional performance.
           </p>
         </div>
         
-        <div className="flex items-end justify-between mt-16">
+        <div className="flex justify-between items-end mt-24">
           {/* MSME Logo */}
           <div className="flex flex-col items-center max-w-[150px]">
             <img 
@@ -95,7 +113,6 @@ const Certificate: React.FC<CertificateProps> = ({
               alt="MSME Logo"
               className="w-24 h-24"
             />
-            <p className="text-xs text-gray-600 mt-1">MSME REGISTERED</p>
           </div>
           
           {/* Signature Section */}
@@ -108,11 +125,9 @@ const Certificate: React.FC<CertificateProps> = ({
                 className="h-16 mx-auto mb-1"
               />
             ) : (
-              <img 
-                src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAAA2CAYAAACgpRmuAAAACXBIWXMAAA7EAAAOxAGVKw4bAAADnUlEQVR4nO3dz0sUYRwH8O/3mXF21l11V/TX+qNIKugQdOgUUUQQHbpLEHioo0V0CPwPIjAi6lxQRAdPQRHdugREBhHRoSKiMILUyk3dXXdnd54OQxtB5cw4+515Pqfhfd/Z73x5mGfmmQcQERERERERERERERERERERERERERERERERERERERFZwsb7BZLb+fh+c6FYPC8iG4mohYi2nRZUbdf4/uf+kcLn3Pv+IVdhGmBEZ1Zi8kQ6nVnabZiRWDQYKAQH97Z3PIiGw3NuAjXBmNs3K9G9z3/r57TbMCLSLCJfROQ5EZ2e2LIM+moGSCTbzoiAxlNSYqqxajCDHnYbRkQ6oygctSTvANg8njKM4L5hXgtFIhkiog163I0IuR5KjLpSKW+PahFpGu9rzICN+0E1rzTb2t8Bg1NaPUDEDBijB13V6UTk1PiLMgdXEAP0QyRzMzIcHS1Ex4vpXFrHRABQVJwvrQC7uWKYhaVepHl+qPtRz6H7N253toTCBUEhDwAAFZ5UlEWR55cB8CwTwyAs9QG+15Uc6lUPrXl+ECDDy36hX45Elq5zGE9EQw2xSG49gJrtiDDG2dPNJHI9u39wlbIZCOiqFLihbEZGZ4gk9OjoSr9/UCwaDP8mkhlunu2TJxapKakFYKMMNODfGWSVeddzJNJzvaH3wcjL4zd6eseM5z8soDXK3PYFwUVbA0/XnNgwm/lX1s26s7qEgD6dXh3tU4qzDXV17xSNfFc2q0NJVupyy0rHohYAaBqN+AqgXtnNjD5QZv5yJDj0WreTF8/m1umYGTWKA0ryXaWzWq0NcdCjVmuDb8uPi0pxUreTF89mrQBQJMrxaTnZhgUgJ1yN3r25Y6dBALS6GQziJKAsz7kJo8w2nEhclEN9Mza3ZLo/Axz0AUkDyLgOJ7NjI0QFo8jv0nxgaSi7q2X3Oru1q/Nmd0d7e0u9X3oQCNT5/UEf9/kEiu8eFJ+devofZutCP0uxmFZI/UyPQ2QFl1kvRaT44WpAcPn/FcbYfAAzteOpx9g8AE5vCKXs9qzkrJYMD28JMJ5dwcT9BxNPItFWXeoh9g/+D5Ig732mTQ/XcX5ERD0icnGiCzLkx8wzCMsB+Hhf2UzdApBxOVLvEzgOYG0lCjNgz1eQX0hD4oIlcnrTrSa7tQjtaByITqOwOQDrtRVmQC1UEDKs88Wx/rP/WtLYYrPQbpurVUIOikgHAGN+cmAWKggRERERERERERERERERERERERH9CT8AVUmpVzAaLBIAAAAASUVORK5CYII="
-                alt="Signature" 
-                className="h-16 mx-auto mb-1"
-              />
+              <div className="h-16 mb-1 flex items-center justify-center">
+                <span className="text-gray-500 italic">Digital Signature</span>
+              </div>
             )}
             <p className="text-base font-bold">{signatoryName}</p>
             <p className="text-sm text-gray-600">{signatoryPosition}</p>
@@ -134,7 +149,7 @@ const Certificate: React.FC<CertificateProps> = ({
         </div>
         
         {/* Footer with contact details */}
-        <div className="flex justify-between items-center mt-16 text-xs text-gray-600">
+        <div className="flex justify-center items-center mt-16 text-xs text-gray-600 space-x-6">
           <div className="flex items-center">
             <div className="bg-blue-500 rounded-full p-1 mr-1">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">

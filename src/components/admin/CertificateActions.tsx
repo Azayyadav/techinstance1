@@ -47,13 +47,28 @@ const CertificateActions: React.FC<CertificateActionsProps> = ({
         logging: false
       });
       
-      // Calculate PDF dimensions (A4 format)
-      const imgWidth = 210; // A4 width in mm
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      // Calculate PDF dimensions (A4 format in landscape)
+      const imgWidth = 297; // A4 width in mm (landscape)
+      const imgHeight = 210; // A4 height in mm (landscape)
       
       // Create PDF document
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, imgWidth, imgHeight);
+      const pdf = new jsPDF('landscape', 'mm', 'a4');
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = pdf.internal.pageSize.getHeight();
+      
+      // Calculate positioning to center the image
+      const ratio = Math.min(pdfWidth / canvas.width, pdfHeight / canvas.height);
+      const imgX = (pdfWidth - canvas.width * ratio) / 2;
+      const imgY = (pdfHeight - canvas.height * ratio) / 2;
+      
+      pdf.addImage(
+        canvas.toDataURL('image/png'), 
+        'PNG', 
+        imgX, 
+        imgY, 
+        canvas.width * ratio, 
+        canvas.height * ratio
+      );
       
       // Save PDF
       pdf.save(`certificate-${certificateId}.pdf`);
