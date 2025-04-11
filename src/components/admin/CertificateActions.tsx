@@ -1,10 +1,16 @@
 
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { Printer, Download, Share2, FileText, QrCode } from "lucide-react";
+import { Printer, Download, Share2, FileText, QrCode, Instagram, Facebook, Linkedin, Mail } from "lucide-react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { useToast } from "@/hooks/use-toast";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface CertificateActionsProps {
   onEdit: () => void;
@@ -36,7 +42,7 @@ const CertificateActions: React.FC<CertificateActionsProps> = ({
 
       // Use html2canvas to create an image of the certificate
       const canvas = await html2canvas(certificateElement as HTMLElement, {
-        scale: 2, // Higher scale for better quality
+        scale: 3, // Higher scale for better quality
         useCORS: true, // Allow loading of cross-origin images
         logging: false
       });
@@ -84,29 +90,78 @@ const CertificateActions: React.FC<CertificateActionsProps> = ({
       });
     });
   };
+  
+  const handleShareToSocial = (platform: string) => {
+    const baseUrl = window.location.origin;
+    const verificationUrl = `${baseUrl}/verify?id=${certificateId}`;
+    
+    let shareUrl = '';
+    
+    switch(platform) {
+      case 'facebook':
+        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(verificationUrl)}`;
+        break;
+      case 'linkedin':
+        shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(verificationUrl)}`;
+        break;
+      case 'twitter':
+        shareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(verificationUrl)}&text=${encodeURIComponent('Check out my certificate from Tech Instance!')}`;
+        break;
+      case 'email':
+        shareUrl = `mailto:?subject=${encodeURIComponent('My Tech Instance Certificate')}&body=${encodeURIComponent(`Check out my verified certificate: ${verificationUrl}`)}`;
+        break;
+    }
+    
+    if (shareUrl) {
+      window.open(shareUrl, '_blank');
+    }
+  };
 
   return (
     <div className="flex flex-wrap justify-end gap-2 print:hidden mb-4">
-      <Button variant="outline" onClick={onEdit}>
+      <Button variant="outline" onClick={onEdit} className="hover:bg-blue-50">
         <FileText className="mr-2 h-4 w-4" />
         Edit
       </Button>
-      <Button variant="outline" onClick={onPrint}>
+      <Button variant="outline" onClick={onPrint} className="hover:bg-blue-50">
         <Printer className="mr-2 h-4 w-4" />
         Print
       </Button>
-      <Button variant="outline" onClick={handleDownloadPDF}>
+      <Button variant="outline" onClick={handleDownloadPDF} className="hover:bg-blue-50">
         <Download className="mr-2 h-4 w-4" />
         Download PDF
       </Button>
-      <Button variant="outline" onClick={handleCopyVerificationURL}>
+      <Button variant="outline" onClick={handleCopyVerificationURL} className="hover:bg-blue-50">
         <QrCode className="mr-2 h-4 w-4" />
         Copy Verification Link
       </Button>
-      <Button variant="outline" onClick={onShare}>
-        <Share2 className="mr-2 h-4 w-4" />
-        Share
-      </Button>
+      
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="outline" className="hover:bg-blue-50">
+            <Share2 className="mr-2 h-4 w-4" />
+            Share
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem onClick={() => handleShareToSocial('facebook')}>
+            <Facebook className="mr-2 h-4 w-4" />
+            Facebook
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => handleShareToSocial('linkedin')}>
+            <Linkedin className="mr-2 h-4 w-4" />
+            LinkedIn
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => handleShareToSocial('twitter')}>
+            <Instagram className="mr-2 h-4 w-4" />
+            Twitter
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => handleShareToSocial('email')}>
+            <Mail className="mr-2 h-4 w-4" />
+            Email
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 };

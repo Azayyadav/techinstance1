@@ -3,7 +3,31 @@ import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle2, XCircle } from "lucide-react";
-import { mockCertificates } from "@/data/mockData";
+
+// Mock data for certificates (moved directly into this file)
+const mockCertificates = [
+  {
+    id: "TECH-XYZ1234",
+    internName: "Jane Doe",
+    program: "Full Stack Development",
+    issueDate: "2024-03-15",
+    status: "Active"
+  },
+  {
+    id: "TECH-ABC5678",
+    internName: "John Smith",
+    program: "UI/UX Design",
+    issueDate: "2024-02-20",
+    status: "Active"
+  },
+  {
+    id: "TECH-DEF9012",
+    internName: "Emily Johnson",
+    program: "Data Science",
+    issueDate: "2024-01-10",
+    status: "Active"
+  }
+];
 
 const VerifyCertificate = () => {
   const [searchParams] = useSearchParams();
