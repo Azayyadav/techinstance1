@@ -27,7 +27,10 @@ const Certificate: React.FC<CertificateProps> = ({
   signatoryName,
   signatoryPosition
 }) => {
-  const verificationUrl = `https://techinstance.com/verify?id=${certificateId}`;
+  // Create a properly formatted verification URL for the QR code
+  // In a production environment, this should be your actual domain
+  const baseUrl = window.location.origin;
+  const verificationUrl = `${baseUrl}/verify?id=${certificateId}`;
   
   return (
     <div className="w-full max-w-4xl mx-auto bg-white relative overflow-hidden">
@@ -42,7 +45,7 @@ const Certificate: React.FC<CertificateProps> = ({
       <div className="relative z-10 p-8 border-8 border-double border-gray-200">
         <div className="flex justify-between items-start mb-6">
           <img 
-            src="/lovable-uploads/fc954afd-6aaf-49e1-9edf-c7b62d8cc66f.png" 
+            src="/lovable-uploads/ca6c923e-b023-417a-b86b-be983f0ddc84.png" 
             alt="Tech Instance Logo" 
             className="h-20 w-auto" 
           />
@@ -70,7 +73,7 @@ const Certificate: React.FC<CertificateProps> = ({
         <div className="flex items-end justify-between mt-16">
           <div className="flex flex-col items-center">
             <img 
-              src="/lovable-uploads/fc954afd-6aaf-49e1-9edf-c7b62d8cc66f.png" 
+              src="/lovable-uploads/ca6c923e-b023-417a-b86b-be983f0ddc84.png" 
               alt="MSME Logo"
               className="w-20 h-20 mb-1"
             />
@@ -98,6 +101,7 @@ const Certificate: React.FC<CertificateProps> = ({
               includeMargin={false}
             />
             <p className="text-xs text-gray-500 mt-1">Scan to verify</p>
+            <p className="text-xs text-gray-500">Certificate ID: {certificateId}</p>
           </div>
         </div>
         

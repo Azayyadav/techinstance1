@@ -47,19 +47,36 @@ const CertificateGenerator = () => {
     window.print();
   };
 
-  const handleDownload = () => {
-    // In a real application, this would generate a PDF
-    toast({
-      title: "Certificate Downloaded",
-      description: "The certificate has been saved to your device."
-    });
-  };
-
   const handleShare = () => {
-    toast({
-      title: "Share Feature",
-      description: "Sharing functionality would be implemented here."
-    });
+    // In a real application, this would show a share dialog
+    // For now we'll use the navigator.share API if available
+    if (navigator.share) {
+      const baseUrl = window.location.origin;
+      const verificationUrl = `${baseUrl}/verify?id=${formData.certificateId}`;
+      
+      navigator.share({
+        title: `${formData.internName}'s Tech Instance Certificate`,
+        text: `Verify ${formData.internName}'s Tech Instance certificate for ${formData.internshipProgram}.`,
+        url: verificationUrl,
+      })
+      .then(() => {
+        toast({
+          title: "Shared successfully",
+          description: "The certificate details have been shared."
+        });
+      })
+      .catch((error) => {
+        toast({
+          title: "Share failed",
+          description: "Unable to share certificate details."
+        });
+      });
+    } else {
+      toast({
+        title: "Share Feature",
+        description: "Sharing is not supported on this browser. Please use the copy verification link option instead."
+      });
+    }
   };
 
   const formatDate = (dateString: string) => {
@@ -86,11 +103,11 @@ const CertificateGenerator = () => {
           <CertificateActions 
             onEdit={() => setShowCertificate(false)}
             onPrint={handlePrint}
-            onDownload={handleDownload}
             onShare={handleShare}
+            certificateId={formData.certificateId}
           />
           
-          <div className="print:m-0 bg-white shadow-xl">
+          <div className="print:m-0 bg-white shadow-xl certificate-container">
             <Certificate 
               internName={formData.internName}
               internshipProgram={formData.internshipProgram}
