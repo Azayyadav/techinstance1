@@ -31,8 +31,8 @@ const Certificate: React.FC<CertificateProps> = ({
   signatureImage,
   companyLogo
 }) => {
-  const baseUrl = window.location.origin;
-  const verificationUrl = `${baseUrl}/verify?id=${certificateId}`;
+  // Using custom domain for verification instead of the Lovable app URL
+  const verificationUrl = `https://www.techinstance.tech/verify?id=${certificateId}`;
   
   return (
     <div className="certificate-container relative bg-white">
