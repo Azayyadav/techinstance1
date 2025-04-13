@@ -69,3 +69,40 @@ export const addCertificate = (certificate: Certificate): Certificate => {
   certificates.push(certificate);
   return certificate;
 };
+
+// Function to delete a certificate by ID
+export const deleteCertificate = (id: string): boolean => {
+  const initialLength = certificates.length;
+  const index = certificates.findIndex(cert => cert.id === id);
+  
+  if (index !== -1) {
+    certificates.splice(index, 1);
+    return initialLength > certificates.length;
+  }
+  
+  return false;
+};
+
+// Function to update an existing certificate
+export const updateCertificate = (id: string, updatedData: Partial<Certificate>): Certificate | null => {
+  const index = certificates.findIndex(cert => cert.id === id);
+  
+  if (index !== -1) {
+    certificates[index] = { ...certificates[index], ...updatedData };
+    return certificates[index];
+  }
+  
+  return null;
+};
+
+// Function to toggle certificate status (Active/Revoked)
+export const toggleCertificateStatus = (id: string): Certificate | null => {
+  const index = certificates.findIndex(cert => cert.id === id);
+  
+  if (index !== -1) {
+    certificates[index].status = certificates[index].status === "Active" ? "Revoked" : "Active";
+    return certificates[index];
+  }
+  
+  return null;
+};

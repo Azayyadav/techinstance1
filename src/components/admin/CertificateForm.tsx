@@ -31,13 +31,15 @@ interface CertificateFormProps {
   handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   handleSelectChange: (name: string, value: string) => void;
   handleSubmit: (e: React.FormEvent) => void;
+  isEditMode?: boolean;
 }
 
 const CertificateForm: React.FC<CertificateFormProps> = ({
   formData,
   handleChange,
   handleSelectChange,
-  handleSubmit
+  handleSubmit,
+  isEditMode = false
 }) => {
   return (
     <Card>
@@ -94,7 +96,7 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
               <Label htmlFor="duration">Duration</Label>
               <Select 
                 onValueChange={(value) => handleSelectChange("duration", value)}
-                defaultValue={formData.duration}
+                value={formData.duration}
               >
                 <SelectTrigger id="duration">
                   <SelectValue placeholder="Select duration" />
@@ -115,7 +117,8 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
                 name="certificateId"
                 value={formData.certificateId}
                 onChange={handleChange}
-                disabled
+                disabled={true}
+                className="bg-gray-50"
               />
             </div>
             
@@ -152,7 +155,9 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
             </div>
           </div>
           
-          <Button type="submit" className="w-full">Generate Certificate</Button>
+          <Button type="submit" className="w-full">
+            {isEditMode ? "Update Certificate" : "Generate Certificate"}
+          </Button>
         </form>
       </CardContent>
     </Card>

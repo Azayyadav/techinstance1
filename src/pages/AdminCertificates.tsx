@@ -13,15 +13,34 @@ import {
   TableRow 
 } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
-import { LogOut, Award, Search, Eye, Download } from "lucide-react";
+import { LogOut, Award, Search, Eye, Download, Trash2, Edit, Check, X } from "lucide-react";
 import CertificateGenerator from "@/components/admin/CertificateGenerator";
-import { certificates, Certificate } from "@/data/certificatesData";
+import { 
+  certificates, 
+  Certificate, 
+  deleteCertificate, 
+  toggleCertificateStatus 
+} from "@/data/certificatesData";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { Badge } from "@/components/ui/badge";
 
 const AdminCertificates = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [activeTab, setActiveTab] = useState<"list" | "create">("list");
+  const [activeTab, setActiveTab] = useState<"list" | "create" | "edit">("list");
   const [certificatesList, setCertificatesList] = useState<Certificate[]>(certificates);
+  const [selectedCertificate, setSelectedCertificate] = useState<Certificate | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [certificateToDelete, setCertificateToDelete] = useState<string | null>(null);
   
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -55,6 +74,55 @@ const AdminCertificates = () => {
       description: "Certificate download started",
     });
   };
+  
+  const handleEditCertificate = (certificate: Certificate) => {
+    setSelectedCertificate(certificate);
+    setActiveTab("edit");
+  };
+
+  const handleDeleteClick = (id: string) => {
+    setCertificateToDelete(id);
+    setDeleteDialogOpen(true);
+  };
+
+  const confirmDelete = () => {
+    if (certificateToDelete) {
+      const success = deleteCertificate(certificateToDelete);
+      
+      if (success) {
+        setCertificatesList(prev => prev.filter(cert => cert.id !== certificateToDelete));
+        
+        toast({
+          title: "Certificate deleted",
+          description: "The certificate has been permanently removed",
+        });
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Could not delete the certificate. Please try again.",
+        });
+      }
+      
+      setDeleteDialogOpen(false);
+      setCertificateToDelete(null);
+    }
+  };
+
+  const handleToggleStatus = (id: string) => {
+    const updatedCertificate = toggleCertificateStatus(id);
+    
+    if (updatedCertificate) {
+      setCertificatesList(prev => 
+        prev.map(cert => cert.id === id ? updatedCertificate : cert)
+      );
+      
+      toast({
+        title: `Certificate ${updatedCertificate.status === "Active" ? "Activated" : "Revoked"}`,
+        description: `The certificate is now ${updatedCertificate.status.toLowerCase()}`,
+      });
+    }
+  };
 
   const filteredCertificates = certificatesList.filter(cert => 
     cert.internName.toLowerCase().includes(searchTerm.toLowerCase()) || 
@@ -69,6 +137,18 @@ const AdminCertificates = () => {
     });
     setActiveTab("list");
   };
+  
+  const onCertificateUpdated = (updatedCertificate: Certificate) => {
+    setCertificatesList(prev => 
+      prev.map(cert => cert.id === updatedCertificate.id ? updatedCertificate : cert)
+    );
+    toast({
+      title: "Certificate Updated",
+      description: `Certificate for ${updatedCertificate.internName} has been updated successfully.`,
+    });
+    setActiveTab("list");
+    setSelectedCertificate(null);
+  };
 
   if (!isAuthenticated) {
     return null; // Will redirect in useEffect
@@ -79,7 +159,7 @@ const AdminCertificates = () => {
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center mb-8">
           <div className="flex items-center">
-            <Award className="h-8 w-8 text-it-blue mr-3" />
+            <Award className="h-8 w-8 text-blue-600 mr-3" />
             <h1 className="text-3xl font-bold">Certificate Management</h1>
           </div>
           <Button variant="outline" onClick={handleLogout}>
@@ -90,13 +170,19 @@ const AdminCertificates = () => {
         <div className="flex space-x-4 mb-6">
           <Button 
             variant={activeTab === "list" ? "default" : "outline"} 
-            onClick={() => setActiveTab("list")}
+            onClick={() => {
+              setActiveTab("list");
+              setSelectedCertificate(null);
+            }}
           >
             Certificate List
           </Button>
           <Button 
             variant={activeTab === "create" ? "default" : "outline"} 
-            onClick={() => setActiveTab("create")}
+            onClick={() => {
+              setActiveTab("create");
+              setSelectedCertificate(null);
+            }}
           >
             Create Certificate
           </Button>
@@ -143,9 +229,14 @@ const AdminCertificates = () => {
                           <TableCell>{cert.internshipProgram}</TableCell>
                           <TableCell>{new Date(cert.issueDate).toLocaleDateString()}</TableCell>
                           <TableCell>
-                            <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">
+                            <Badge variant={cert.status === "Active" ? "success" : "destructive"} className="cursor-pointer" onClick={() => handleToggleStatus(cert.id)}>
+                              {cert.status === "Active" ? (
+                                <Check className="h-3 w-3 mr-1" />
+                              ) : (
+                                <X className="h-3 w-3 mr-1" />
+                              )}
                               {cert.status}
-                            </span>
+                            </Badge>
                           </TableCell>
                           <TableCell>
                             <div className="flex space-x-2">
@@ -153,6 +244,7 @@ const AdminCertificates = () => {
                                 variant="ghost" 
                                 size="sm" 
                                 onClick={() => handleViewCertificate(cert.id)}
+                                title="View Certificate"
                               >
                                 <Eye className="h-4 w-4" />
                               </Button>
@@ -160,8 +252,25 @@ const AdminCertificates = () => {
                                 variant="ghost" 
                                 size="sm"
                                 onClick={() => handleDownloadCertificate(cert.id)}
+                                title="Download Certificate"
                               >
                                 <Download className="h-4 w-4" />
+                              </Button>
+                              <Button 
+                                variant="ghost" 
+                                size="sm" 
+                                onClick={() => handleEditCertificate(cert)}
+                                title="Edit Certificate"
+                              >
+                                <Edit className="h-4 w-4 text-blue-500" />
+                              </Button>
+                              <Button 
+                                variant="ghost" 
+                                size="sm" 
+                                onClick={() => handleDeleteClick(cert.id)}
+                                title="Delete Certificate"
+                              >
+                                <Trash2 className="h-4 w-4 text-red-500" />
                               </Button>
                             </div>
                           </TableCell>
@@ -179,10 +288,34 @@ const AdminCertificates = () => {
               </CardContent>
             </Card>
           </div>
-        ) : (
+        ) : activeTab === "create" ? (
           <CertificateGenerator onCertificateGenerated={onCertificateGenerated} />
+        ) : (
+          <CertificateGenerator 
+            onCertificateGenerated={onCertificateUpdated} 
+            existingCertificate={selectedCertificate} 
+            isEditMode={true}
+          />
         )}
       </div>
+      
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete the certificate and remove it from our servers.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDelete} className="bg-red-600 hover:bg-red-700">
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };

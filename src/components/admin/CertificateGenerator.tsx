@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import Certificate from "./Certificate";
 import CertificateForm from "./CertificateForm";
@@ -7,13 +7,19 @@ import CertificateActions from "./CertificateActions";
 import { Button } from "@/components/ui/button";
 import { Upload } from "lucide-react";
 import { Label } from "@/components/ui/label";
-import { addCertificate, Certificate as CertificateType } from "@/data/certificatesData";
+import { addCertificate, updateCertificate, Certificate as CertificateType } from "@/data/certificatesData";
 
 interface CertificateGeneratorProps {
   onCertificateGenerated?: (certificate: CertificateType) => void;
+  existingCertificate?: CertificateType | null;
+  isEditMode?: boolean;
 }
 
-const CertificateGenerator: React.FC<CertificateGeneratorProps> = ({ onCertificateGenerated }) => {
+const CertificateGenerator: React.FC<CertificateGeneratorProps> = ({ 
+  onCertificateGenerated, 
+  existingCertificate = null,
+  isEditMode = false
+}) => {
   const [formData, setFormData] = useState({
     internName: "",
     internshipProgram: "",
@@ -30,6 +36,24 @@ const CertificateGenerator: React.FC<CertificateGeneratorProps> = ({ onCertifica
   const [signatureImage, setSignatureImage] = useState<string | undefined>(undefined);
   const [companyLogo, setCompanyLogo] = useState<string | undefined>(undefined);
   const { toast } = useToast();
+
+  // Initialize form data when editing an existing certificate
+  useEffect(() => {
+    if (existingCertificate && isEditMode) {
+      setFormData({
+        internName: existingCertificate.internName,
+        internshipProgram: existingCertificate.internshipProgram,
+        startDate: existingCertificate.startDate,
+        endDate: existingCertificate.endDate,
+        certificateId: existingCertificate.id,
+        companyName: existingCertificate.companyName,
+        duration: existingCertificate.duration,
+        signatoryName: "Ajay Kumar Yadav", // Default values since these aren't stored in DB model
+        signatoryPosition: "Tech Instance Coordinator",
+        description: ""
+      });
+    }
+  }, [existingCertificate, isEditMode]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -51,8 +75,8 @@ const CertificateGenerator: React.FC<CertificateGeneratorProps> = ({ onCertifica
       return;
     }
 
-    // Add to certificate database
-    const newCertificate: CertificateType = {
+    // Create or update certificate
+    const certificate: CertificateType = {
       id: formData.certificateId,
       internName: formData.internName,
       internshipProgram: formData.internshipProgram,
@@ -60,15 +84,20 @@ const CertificateGenerator: React.FC<CertificateGeneratorProps> = ({ onCertifica
       endDate: formData.endDate,
       companyName: formData.companyName,
       duration: formData.duration,
-      issueDate: new Date().toISOString().split('T')[0],
-      status: "Active"
+      issueDate: isEditMode && existingCertificate ? existingCertificate.issueDate : new Date().toISOString().split('T')[0],
+      status: isEditMode && existingCertificate ? existingCertificate.status : "Active"
     };
 
-    // Add to certificate database
-    addCertificate(newCertificate);
+    if (isEditMode && existingCertificate) {
+      // Update existing certificate
+      updateCertificate(certificate.id, certificate);
+    } else {
+      // Add new certificate
+      addCertificate(certificate);
+    }
     
     if (onCertificateGenerated) {
-      onCertificateGenerated(newCertificate);
+      onCertificateGenerated(certificate);
     }
     
     setShowCertificate(true);
@@ -166,6 +195,7 @@ const CertificateGenerator: React.FC<CertificateGeneratorProps> = ({ onCertifica
             handleChange={handleChange}
             handleSelectChange={handleSelectChange}
             handleSubmit={handleSubmit}
+            isEditMode={isEditMode}
           />
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
