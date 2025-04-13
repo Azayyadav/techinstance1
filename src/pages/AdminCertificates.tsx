@@ -1,10 +1,9 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { 
   Table, 
   TableBody, 
@@ -16,42 +15,18 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { LogOut, Award, Search, Eye, Download } from "lucide-react";
 import CertificateGenerator from "@/components/admin/CertificateGenerator";
-
-// Mock data for certificates
-const mockCertificates = [
-  {
-    id: "TECH-XYZ1234",
-    internName: "Jane Doe",
-    program: "Full Stack Development",
-    issueDate: "2024-03-15",
-    status: "Active"
-  },
-  {
-    id: "TECH-ABC5678",
-    internName: "John Smith",
-    program: "UI/UX Design",
-    issueDate: "2024-02-20",
-    status: "Active"
-  },
-  {
-    id: "TECH-DEF9012",
-    internName: "Emily Johnson",
-    program: "Data Science",
-    issueDate: "2024-01-10",
-    status: "Active"
-  }
-];
+import { certificates, Certificate } from "@/data/certificatesData";
 
 const AdminCertificates = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState<"list" | "create">("list");
-  const [certificates, setCertificates] = useState(mockCertificates);
+  const [certificatesList, setCertificatesList] = useState<Certificate[]>(certificates);
   
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  React.useEffect(() => {
+  useEffect(() => {
     // Check if admin is authenticated
     const token = localStorage.getItem("adminToken");
     if (!token) {
@@ -70,10 +45,30 @@ const AdminCertificates = () => {
     navigate("/admin");
   };
 
-  const filteredCertificates = certificates.filter(cert => 
+  const handleViewCertificate = (id: string) => {
+    window.open(`/verify?id=${id}`, '_blank');
+  };
+
+  const handleDownloadCertificate = (id: string) => {
+    toast({
+      title: "Download initiated",
+      description: "Certificate download started",
+    });
+  };
+
+  const filteredCertificates = certificatesList.filter(cert => 
     cert.internName.toLowerCase().includes(searchTerm.toLowerCase()) || 
     cert.id.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const onCertificateGenerated = (newCertificate: Certificate) => {
+    setCertificatesList(prev => [...prev, newCertificate]);
+    toast({
+      title: "Certificate Generated",
+      description: `Certificate for ${newCertificate.internName} has been created successfully.`,
+    });
+    setActiveTab("list");
+  };
 
   if (!isAuthenticated) {
     return null; // Will redirect in useEffect
@@ -145,7 +140,7 @@ const AdminCertificates = () => {
                         <TableRow key={cert.id}>
                           <TableCell className="font-medium">{cert.id}</TableCell>
                           <TableCell>{cert.internName}</TableCell>
-                          <TableCell>{cert.program}</TableCell>
+                          <TableCell>{cert.internshipProgram}</TableCell>
                           <TableCell>{new Date(cert.issueDate).toLocaleDateString()}</TableCell>
                           <TableCell>
                             <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">
@@ -154,10 +149,18 @@ const AdminCertificates = () => {
                           </TableCell>
                           <TableCell>
                             <div className="flex space-x-2">
-                              <Button variant="ghost" size="sm">
+                              <Button 
+                                variant="ghost" 
+                                size="sm" 
+                                onClick={() => handleViewCertificate(cert.id)}
+                              >
                                 <Eye className="h-4 w-4" />
                               </Button>
-                              <Button variant="ghost" size="sm">
+                              <Button 
+                                variant="ghost" 
+                                size="sm"
+                                onClick={() => handleDownloadCertificate(cert.id)}
+                              >
                                 <Download className="h-4 w-4" />
                               </Button>
                             </div>
@@ -177,7 +180,7 @@ const AdminCertificates = () => {
             </Card>
           </div>
         ) : (
-          <CertificateGenerator />
+          <CertificateGenerator onCertificateGenerated={onCertificateGenerated} />
         )}
       </div>
     </div>

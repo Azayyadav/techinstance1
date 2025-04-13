@@ -3,53 +3,32 @@ import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle2, XCircle } from "lucide-react";
-
-// Mock data for certificates
-const mockCertificates = [
-  {
-    id: "TECH-XYZ1234",
-    internName: "Jane Doe",
-    program: "Full Stack Development",
-    issueDate: "2024-03-15",
-    status: "Active"
-  },
-  {
-    id: "TECH-ABC5678",
-    internName: "John Smith",
-    program: "UI/UX Design",
-    issueDate: "2024-02-20",
-    status: "Active"
-  },
-  {
-    id: "TECH-DEF9012",
-    internName: "Emily Johnson",
-    program: "Data Science",
-    issueDate: "2024-01-10",
-    status: "Active"
-  }
-];
+import { verifyCertificate, Certificate } from "@/data/certificatesData";
 
 const VerifyCertificate = () => {
   const [searchParams] = useSearchParams();
   const [certificateFound, setCertificateFound] = useState<boolean | null>(null);
-  const [certificate, setCertificate] = useState<any>(null);
+  const [certificate, setCertificate] = useState<Certificate | null>(null);
   const [loading, setLoading] = useState(true);
 
   const certificateId = searchParams.get("id");
 
   useEffect(() => {
     // In a real application, this would be an API call
-    const verifyCertificate = () => {
+    const performVerification = () => {
       setLoading(true);
       
       // Simulate API delay
       setTimeout(() => {
-        // Check if certificate exists in mock data
-        const foundCertificate = mockCertificates.find(cert => cert.id === certificateId);
-        
-        if (foundCertificate) {
-          setCertificateFound(true);
-          setCertificate(foundCertificate);
+        if (certificateId) {
+          const foundCertificate = verifyCertificate(certificateId);
+          
+          if (foundCertificate) {
+            setCertificateFound(true);
+            setCertificate(foundCertificate);
+          } else {
+            setCertificateFound(false);
+          }
         } else {
           setCertificateFound(false);
         }
@@ -58,12 +37,7 @@ const VerifyCertificate = () => {
       }, 1000);
     };
 
-    if (certificateId) {
-      verifyCertificate();
-    } else {
-      setCertificateFound(false);
-      setLoading(false);
-    }
+    performVerification();
   }, [certificateId]);
 
   return (
@@ -104,19 +78,35 @@ const VerifyCertificate = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
                       <div className="p-3 bg-white rounded-md shadow-sm">
                         <p className="text-sm text-gray-500 mb-1">Certificate ID</p>
-                        <p className="font-medium text-gray-800">{certificate.id}</p>
+                        <p className="font-medium text-gray-800">{certificate?.id}</p>
                       </div>
                       <div className="p-3 bg-white rounded-md shadow-sm">
                         <p className="text-sm text-gray-500 mb-1">Issued To</p>
-                        <p className="font-medium text-gray-800">{certificate.internName}</p>
+                        <p className="font-medium text-gray-800">{certificate?.internName}</p>
                       </div>
                       <div className="p-3 bg-white rounded-md shadow-sm">
                         <p className="text-sm text-gray-500 mb-1">Program</p>
-                        <p className="font-medium text-gray-800">{certificate.program}</p>
+                        <p className="font-medium text-gray-800">{certificate?.internshipProgram}</p>
                       </div>
                       <div className="p-3 bg-white rounded-md shadow-sm">
                         <p className="text-sm text-gray-500 mb-1">Issue Date</p>
-                        <p className="font-medium text-gray-800">{new Date(certificate.issueDate).toLocaleDateString('en-US', {
+                        <p className="font-medium text-gray-800">{new Date(certificate?.issueDate || "").toLocaleDateString('en-US', {
+                          day: 'numeric',
+                          month: 'long',
+                          year: 'numeric'
+                        })}</p>
+                      </div>
+                      <div className="p-3 bg-white rounded-md shadow-sm">
+                        <p className="text-sm text-gray-500 mb-1">Started On</p>
+                        <p className="font-medium text-gray-800">{new Date(certificate?.startDate || "").toLocaleDateString('en-US', {
+                          day: 'numeric',
+                          month: 'long',
+                          year: 'numeric'
+                        })}</p>
+                      </div>
+                      <div className="p-3 bg-white rounded-md shadow-sm">
+                        <p className="text-sm text-gray-500 mb-1">Completed On</p>
+                        <p className="font-medium text-gray-800">{new Date(certificate?.endDate || "").toLocaleDateString('en-US', {
                           day: 'numeric',
                           month: 'long',
                           year: 'numeric'

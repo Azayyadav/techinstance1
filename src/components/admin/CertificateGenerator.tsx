@@ -7,8 +7,13 @@ import CertificateActions from "./CertificateActions";
 import { Button } from "@/components/ui/button";
 import { Upload } from "lucide-react";
 import { Label } from "@/components/ui/label";
+import { addCertificate, Certificate as CertificateType } from "@/data/certificatesData";
 
-const CertificateGenerator = () => {
+interface CertificateGeneratorProps {
+  onCertificateGenerated?: (certificate: CertificateType) => void;
+}
+
+const CertificateGenerator: React.FC<CertificateGeneratorProps> = ({ onCertificateGenerated }) => {
   const [formData, setFormData] = useState({
     internName: "",
     internshipProgram: "",
@@ -16,7 +21,7 @@ const CertificateGenerator = () => {
     endDate: new Date().toISOString().split('T')[0],
     certificateId: `TECH-${Math.random().toString(36).substring(2, 9).toUpperCase()}`,
     companyName: "Tech Instance",
-    duration: "3-month internship",
+    duration: "2-month",
     signatoryName: "Ajay Kumar Yadav",
     signatoryPosition: "Tech Instance Coordinator",
     description: ""
@@ -45,6 +50,27 @@ const CertificateGenerator = () => {
       });
       return;
     }
+
+    // Add to certificate database
+    const newCertificate: CertificateType = {
+      id: formData.certificateId,
+      internName: formData.internName,
+      internshipProgram: formData.internshipProgram,
+      startDate: formData.startDate,
+      endDate: formData.endDate,
+      companyName: formData.companyName,
+      duration: formData.duration,
+      issueDate: new Date().toISOString().split('T')[0],
+      status: "Active"
+    };
+
+    // Add to certificate database
+    addCertificate(newCertificate);
+    
+    if (onCertificateGenerated) {
+      onCertificateGenerated(newCertificate);
+    }
+    
     setShowCertificate(true);
   };
 
@@ -56,8 +82,7 @@ const CertificateGenerator = () => {
     // In a real application, this would show a share dialog
     // For now we'll use the navigator.share API if available
     if (navigator.share) {
-      const baseUrl = window.location.origin;
-      const verificationUrl = `${baseUrl}/verify?id=${formData.certificateId}`;
+      const verificationUrl = `https://www.techinstance.tech/verify?id=${formData.certificateId}`;
       
       navigator.share({
         title: `${formData.internName}'s Tech Instance Certificate`,

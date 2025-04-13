@@ -31,7 +31,7 @@ const Certificate: React.FC<CertificateProps> = ({
   signatureImage,
   companyLogo
 }) => {
-  // Using custom domain for verification instead of the Lovable app URL
+  // Using custom domain for verification
   const verificationUrl = `https://www.techinstance.tech/verify?id=${certificateId}`;
   
   return (
@@ -46,13 +46,8 @@ const Certificate: React.FC<CertificateProps> = ({
       
       {/* Content */}
       <div className="relative z-10 p-8 m-2">
-        {/* Header with small thumbnails */}
+        {/* Header with company logo */}
         <div className="flex justify-between mb-10">
-          <div className="w-20 h-20 bg-gray-100 p-1">
-            {companyLogo && (
-              <img src={companyLogo} alt="Company logo" className="w-full h-full object-contain" />
-            )}
-          </div>
           <div className="w-20 h-20 bg-gray-100 p-1">
             {companyLogo && (
               <img src={companyLogo} alt="Company logo" className="w-full h-full object-contain" />
@@ -85,7 +80,7 @@ const Certificate: React.FC<CertificateProps> = ({
         
         {/* Signature Section */}
         <div className="flex justify-between items-end mt-16">
-          {/* Left Thumbnail */}
+          {/* Company Logo */}
           <div className="w-20 h-20 bg-gray-100 p-1">
             {companyLogo && (
               <img src={companyLogo} alt="Company logo" className="w-full h-full object-contain" />
