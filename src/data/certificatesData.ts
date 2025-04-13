@@ -13,6 +13,7 @@ export interface Certificate {
   exam?: string;
   totalCandidates?: string;
   internImage?: string;
+  customDescription?: string;
 }
 
 // Mock data for certificates - in a real application, this would be stored in a database
@@ -30,7 +31,8 @@ export const certificates: Certificate[] = [
     score: "85",
     assignments: "23/25",
     exam: "62/75",
-    totalCandidates: "524"
+    totalCandidates: "524",
+    customDescription: "For successfully completing a 2-month internship from January 15, 2024 to March 15, 2024 in Full Stack Development at Tech Instance, Jane demonstrated strong dedication, technical skills, and valuable contributions to real-world projects."
   },
   {
     id: "TECH-ABC5678",
@@ -45,7 +47,8 @@ export const certificates: Certificate[] = [
     score: "78",
     assignments: "22/25",
     exam: "56/75",
-    totalCandidates: "632"
+    totalCandidates: "632",
+    customDescription: "For successfully completing a 2-month internship from December 20, 2023 to February 20, 2024 in UI/UX Design at Tech Instance, John demonstrated strong dedication, technical skills, and valuable contributions to real-world projects."
   },
   {
     id: "TECH-DEF9012",
@@ -60,7 +63,8 @@ export const certificates: Certificate[] = [
     score: "92",
     assignments: "25/25",
     exam: "67/75",
-    totalCandidates: "418"
+    totalCandidates: "418",
+    customDescription: "For successfully completing a 2-month internship from November 10, 2023 to January 10, 2024 in Data Science at Tech Instance, Emily demonstrated strong dedication, technical skills, and valuable contributions to real-world projects."
   },
   {
     id: "TECH-EJXZFAD",
@@ -75,7 +79,8 @@ export const certificates: Certificate[] = [
     score: "81",
     assignments: "21/25",
     exam: "60/75",
-    totalCandidates: "587"
+    totalCandidates: "587",
+    customDescription: "For successfully completing a 2-month internship from December 1, 2023 to February 1, 2024 in Web Development at Tech Instance, Alex demonstrated strong dedication, technical skills, and valuable contributions to real-world projects."
   }
 ];
 

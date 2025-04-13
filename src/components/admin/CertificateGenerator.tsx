@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Upload } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { 
   Dialog,
   DialogContent,
@@ -35,14 +36,15 @@ const CertificateGenerator: React.FC<CertificateGeneratorProps> = ({
     endDate: new Date().toISOString().split('T')[0],
     certificateId: `TECH-${Math.random().toString(36).substring(2, 9).toUpperCase()}`,
     companyName: "Tech Instance",
-    duration: "2-month",
+    duration: "1-month",
     signatoryName: "Ajay Kumar Yadav",
     signatoryPosition: "Tech Instance Coordinator",
     description: "",
     score: "75",
     assignments: "20/25",
     exam: "55/75",
-    totalCandidates: "537"
+    totalCandidates: "537",
+    customDescription: "For successfully completing a 1-month internship from 25th December, 2024 to 25th January, 2025 in React Native & Appwrite at Tech Instance, Sahil demonstrated strong dedication, technical skills, and valuable contributions to real-world projects.\n\nWe appreciate Sahil's efforts and wish him continued success."
   });
   const [showCertificate, setShowCertificate] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
@@ -68,7 +70,8 @@ const CertificateGenerator: React.FC<CertificateGeneratorProps> = ({
         score: existingCertificate.score || "75",
         assignments: existingCertificate.assignments || "20/25",
         exam: existingCertificate.exam || "55/75",
-        totalCandidates: existingCertificate.totalCandidates || "537"
+        totalCandidates: existingCertificate.totalCandidates || "537",
+        customDescription: existingCertificate.customDescription || "For successfully completing a 1-month internship from 25th December, 2024 to 25th January, 2025 in React Native & Appwrite at Tech Instance, Sahil demonstrated strong dedication, technical skills, and valuable contributions to real-world projects.\n\nWe appreciate Sahil's efforts and wish him continued success."
       });
       
       if (existingCertificate.internImage) {
@@ -112,7 +115,8 @@ const CertificateGenerator: React.FC<CertificateGeneratorProps> = ({
       assignments: formData.assignments,
       exam: formData.exam,
       totalCandidates: formData.totalCandidates,
-      internImage: internImage
+      internImage: internImage,
+      customDescription: formData.customDescription
     };
 
     if (isEditMode && existingCertificate) {
@@ -275,6 +279,7 @@ const CertificateGenerator: React.FC<CertificateGeneratorProps> = ({
                     assignments={formData.assignments}
                     exam={formData.exam}
                     totalCandidates={formData.totalCandidates}
+                    customDescription={formData.customDescription}
                   />
                 </div>
               </DialogContent>
@@ -465,6 +470,25 @@ const CertificateGenerator: React.FC<CertificateGeneratorProps> = ({
               </div>
             </div>
           </div>
+          
+          {/* Custom Description Field */}
+          <div className="bg-white p-6 rounded-lg shadow-md">
+            <h3 className="text-lg font-medium mb-4">Custom Certificate Description</h3>
+            <div>
+              <Label htmlFor="customDescription" className="block mb-2">Description Text</Label>
+              <Textarea
+                id="customDescription"
+                name="customDescription"
+                value={formData.customDescription}
+                onChange={handleChange}
+                className="w-full min-h-[150px]"
+                placeholder="Enter a custom description for the certificate..."
+              />
+              <p className="text-xs text-gray-500 mt-2">
+                This text will be displayed prominently on the certificate. Include details about the internship experience.
+              </p>
+            </div>
+          </div>
         </div>
       ) : (
         <div className="space-y-4">
@@ -494,6 +518,7 @@ const CertificateGenerator: React.FC<CertificateGeneratorProps> = ({
               assignments={formData.assignments}
               exam={formData.exam}
               totalCandidates={formData.totalCandidates}
+              customDescription={formData.customDescription}
             />
           </div>
         </div>

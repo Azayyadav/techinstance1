@@ -20,6 +20,7 @@ interface CertificateProps {
   assignments?: string;
   exam?: string;
   totalCandidates?: string;
+  customDescription?: string;
 }
 
 const Certificate: React.FC<CertificateProps> = ({
@@ -39,7 +40,8 @@ const Certificate: React.FC<CertificateProps> = ({
   score = "",
   assignments = "",
   exam = "",
-  totalCandidates = ""
+  totalCandidates = "",
+  customDescription = ""
 }) => {
   // Using custom domain for verification
   const verificationUrl = `https://www.techinstance.tech/verify?id=${certificateId}`;
@@ -90,6 +92,13 @@ const Certificate: React.FC<CertificateProps> = ({
           </div>
         )}
         
+        {/* Custom Description */}
+        {customDescription && (
+          <div className="text-center mb-6 mx-auto max-w-3xl">
+            <p className="text-lg leading-relaxed">{customDescription}</p>
+          </div>
+        )}
+        
         {/* Score Section */}
         {score && (
           <div className="text-center mb-6">
@@ -134,11 +143,10 @@ const Certificate: React.FC<CertificateProps> = ({
       {/* Footer */}
       <div className="bg-blue-900 text-white p-3 mt-4 flex justify-between items-center">
         <div>
-          <p className="font-bold">Roll No: {certificateId}</p>
+          <p className="font-bold">UID: {certificateId}</p>
         </div>
         
         <div className="flex items-center">
-          <p className="mr-4">To verify the certificate</p>
           <QRCodeCanvas 
             value={verificationUrl}
             size={60}
@@ -150,7 +158,7 @@ const Certificate: React.FC<CertificateProps> = ({
         </div>
         
         <div>
-          <p>No. of credits recommended: 3 or 4</p>
+          <p>TECHINSTANCE.TECH</p>
         </div>
       </div>
     </div>
