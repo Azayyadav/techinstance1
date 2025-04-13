@@ -1,4 +1,3 @@
-
 export interface Certificate {
   id: string;
   internName: string;
@@ -9,6 +8,11 @@ export interface Certificate {
   duration: string;
   issueDate: string;
   status: "Active" | "Revoked";
+  score?: string;
+  assignments?: string;
+  exam?: string;
+  totalCandidates?: string;
+  internImage?: string;
 }
 
 // Mock data for certificates - in a real application, this would be stored in a database
@@ -22,7 +26,11 @@ export const certificates: Certificate[] = [
     companyName: "Tech Instance",
     duration: "2-month",
     issueDate: "2024-03-15",
-    status: "Active"
+    status: "Active",
+    score: "85",
+    assignments: "23/25",
+    exam: "62/75",
+    totalCandidates: "524"
   },
   {
     id: "TECH-ABC5678",
@@ -33,7 +41,11 @@ export const certificates: Certificate[] = [
     companyName: "Tech Instance",
     duration: "2-month",
     issueDate: "2024-02-20",
-    status: "Active"
+    status: "Active",
+    score: "78",
+    assignments: "22/25",
+    exam: "56/75",
+    totalCandidates: "632"
   },
   {
     id: "TECH-DEF9012",
@@ -44,7 +56,11 @@ export const certificates: Certificate[] = [
     companyName: "Tech Instance",
     duration: "2-month",
     issueDate: "2024-01-10",
-    status: "Active"
+    status: "Active",
+    score: "92",
+    assignments: "25/25",
+    exam: "67/75",
+    totalCandidates: "418"
   },
   {
     id: "TECH-EJXZFAD",
@@ -55,7 +71,11 @@ export const certificates: Certificate[] = [
     companyName: "Tech Instance",
     duration: "2-month",
     issueDate: "2024-02-01",
-    status: "Active"
+    status: "Active",
+    score: "81",
+    assignments: "21/25",
+    exam: "60/75",
+    totalCandidates: "587"
   }
 ];
 

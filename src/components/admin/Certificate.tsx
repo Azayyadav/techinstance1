@@ -15,6 +15,11 @@ interface CertificateProps {
   signatoryPosition: string;
   signatureImage?: string;
   companyLogo?: string;
+  internImage?: string;
+  score?: string;
+  assignments?: string;
+  exam?: string;
+  totalCandidates?: string;
 }
 
 const Certificate: React.FC<CertificateProps> = ({
@@ -29,109 +34,123 @@ const Certificate: React.FC<CertificateProps> = ({
   signatoryName,
   signatoryPosition,
   signatureImage,
-  companyLogo
+  companyLogo,
+  internImage,
+  score = "",
+  assignments = "",
+  exam = "",
+  totalCandidates = ""
 }) => {
   // Using custom domain for verification
   const verificationUrl = `https://www.techinstance.tech/verify?id=${certificateId}`;
   
   return (
-    <div className="certificate-container relative bg-white">
-      {/* Blue corner accents */}
-      <div className="blue-corners absolute inset-0">
-        <div className="top-left"></div>
-        <div className="top-right"></div>
-        <div className="bottom-left"></div>
-        <div className="bottom-right"></div>
+    <div className="certificate-container relative bg-white border border-gray-200">
+      {/* Header */}
+      <div className="flex justify-between items-center px-10 pt-8 pb-2 border-b border-gray-200">
+        <div className="w-24 h-24">
+          {companyLogo ? (
+            <img src={companyLogo} alt="Company logo" className="w-full h-full object-contain" />
+          ) : (
+            <div className="w-24 h-24 rounded-full bg-blue-600 text-white flex items-center justify-center text-4xl font-bold">
+              TI
+            </div>
+          )}
+        </div>
+        
+        <div className="text-center">
+          <h1 className="text-3xl md:text-4xl font-bold text-blue-800">
+            TECH INSTANCE INTERNSHIP CERTIFICATION
+          </h1>
+          <p className="text-md text-gray-600">(Tech Instance Professional Development Program)</p>
+        </div>
+        
+        <div className="w-24 h-24">
+          <img 
+            src="/public/lovable-uploads/431b2088-5fbb-4d8b-814c-0dd6642990f8.png" 
+            alt="Skill India" 
+            className="w-full h-full object-contain"
+          />
+        </div>
       </div>
       
-      {/* Content */}
-      <div className="relative z-10 p-8 m-2">
-        {/* Header with company logo */}
-        <div className="flex justify-between mb-10">
-          <div className="w-20 h-20 bg-gray-100 p-1">
-            {companyLogo && (
-              <img src={companyLogo} alt="Company logo" className="w-full h-full object-contain" />
-            )}
+      {/* Certificate Content */}
+      <div className="p-6 flex flex-col items-center">
+        <div className="text-center mb-8 mt-4">
+          <p className="text-xl italic">This certificate is awarded to</p>
+          <h2 className="text-4xl font-bold my-4">{internName.toUpperCase()}</h2>
+          <p className="text-xl italic">for successfully completing the course</p>
+          <h3 className="text-3xl font-bold my-4">{internshipProgram}</h3>
+        </div>
+        
+        {/* Intern Image */}
+        {internImage && (
+          <div className="absolute right-10 top-48 w-32 h-40 border border-gray-300">
+            <img src={internImage} alt="Intern" className="w-full h-full object-cover" />
           </div>
-        </div>
+        )}
         
-        {/* Certificate Title */}
-        <div className="text-center mb-12">
-          <h1 className="text-6xl font-bold text-blue-600 tracking-wider">CERTIFICATE</h1>
-          <p className="text-xl text-blue-600">OF COMPLETION</p>
-        </div>
+        {/* Score Section */}
+        {score && (
+          <div className="text-center mb-6">
+            <p className="text-xl italic mb-2">with a consolidated score of <span className="text-3xl font-bold mx-2">{score}</span>%</p>
+            
+            {/* Score Table */}
+            <table className="border-collapse border border-gray-400 mx-auto">
+              <tr>
+                <td className="border border-gray-400 px-6 py-2">Online Assignments</td>
+                <td className="border border-gray-400 px-6 py-2 font-bold">{assignments}</td>
+                <td className="border border-gray-400 px-6 py-2">Proctored Exam</td>
+                <td className="border border-gray-400 px-6 py-2 font-bold">{exam}</td>
+              </tr>
+            </table>
+          </div>
+        )}
         
-        {/* Certificate Text */}
-        <div className="text-center mb-8">
-          <p className="text-lg">This certificate is proudly presented to</p>
-        </div>
-        
-        <div className="text-center mb-12">
-          <h2 className="text-5xl font-bold">{internName}</h2>
-          <div className="border-b border-gray-300 w-4/5 mx-auto my-6"></div>
-        </div>
-        
-        <div className="text-center mb-16">
-          <p className="text-lg leading-relaxed">
-            for successfully completing a {duration} internship from {startDate}, to {endDate}, 
-            <br />in {internshipProgram} at {companyName}, showcasing commendable dedication and exceptional performance.
+        {totalCandidates && (
+          <p className="text-center text-lg mb-6">
+            Total number of candidates certified in this course: <span className="font-bold">{totalCandidates}</span>
           </p>
-        </div>
+        )}
         
-        {/* Signature Section */}
-        <div className="flex justify-between items-end mt-16">
-          {/* Company Logo */}
-          <div className="w-20 h-20 bg-gray-100 p-1">
-            {companyLogo && (
-              <img src={companyLogo} alt="Company logo" className="w-full h-full object-contain" />
-            )}
+        <div className="flex justify-between w-full mt-4 px-10">
+          <div className="text-left">
+            <p className="text-lg">{startDate} - {endDate}</p>
+            <p className="text-lg">({duration})</p>
           </div>
           
-          {/* Signature */}
           <div className="text-center">
-            <p className="text-lg mb-2">Best Regards,</p>
             {signatureImage ? (
-              <img src={signatureImage} alt="Signature" className="h-12 mx-auto mb-1" />
+              <img src={signatureImage} alt="Signature" className="h-16 mx-auto mb-1" />
             ) : (
-              <p className="italic text-gray-500 mb-1">Digital Signature</p>
+              <div className="h-16 w-40 border-b border-gray-400 mb-1"></div>
             )}
             <p className="font-bold">{signatoryName}</p>
-            <p className="text-sm text-gray-600">{signatoryPosition}</p>
-          </div>
-          
-          {/* QR Code */}
-          <div className="text-center">
-            <QRCodeCanvas 
-              value={verificationUrl}
-              size={100}
-              bgColor="#ffffff"
-              fgColor="#000000"
-              level="H"
-              includeMargin={false}
-            />
-            <p className="text-xs text-gray-600 mt-1">Scan to verify</p>
-            <p className="text-xs text-gray-600">{certificateId.substring(0, 10)}</p>
+            <p className="text-sm">{signatoryPosition}</p>
           </div>
         </div>
+      </div>
+      
+      {/* Footer */}
+      <div className="bg-blue-900 text-white p-3 mt-4 flex justify-between items-center">
+        <div>
+          <p className="font-bold">Roll No: {certificateId}</p>
+        </div>
         
-        {/* Footer */}
-        <div className="flex justify-center items-center mt-12 space-x-6 text-sm">
-          <div className="flex items-center">
-            <div className="bg-blue-600 rounded-full p-1 mr-2">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
-              </svg>
-            </div>
-            www.techinstance.tech
-          </div>
-          <div className="flex items-center">
-            <div className="bg-blue-600 rounded-full p-1 mr-2">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-              </svg>
-            </div>
-            technologyinstance@gmail.com
-          </div>
+        <div className="flex items-center">
+          <p className="mr-4">To verify the certificate</p>
+          <QRCodeCanvas 
+            value={verificationUrl}
+            size={60}
+            bgColor="#ffffff"
+            fgColor="#000000"
+            level="H"
+            includeMargin={false}
+          />
+        </div>
+        
+        <div>
+          <p>No. of credits recommended: 3 or 4</p>
         </div>
       </div>
     </div>

@@ -7,6 +7,14 @@ import CertificateActions from "./CertificateActions";
 import { Button } from "@/components/ui/button";
 import { Upload } from "lucide-react";
 import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { 
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { addCertificate, updateCertificate, Certificate as CertificateType } from "@/data/certificatesData";
 
 interface CertificateGeneratorProps {
@@ -30,11 +38,17 @@ const CertificateGenerator: React.FC<CertificateGeneratorProps> = ({
     duration: "2-month",
     signatoryName: "Ajay Kumar Yadav",
     signatoryPosition: "Tech Instance Coordinator",
-    description: ""
+    description: "",
+    score: "75",
+    assignments: "20/25",
+    exam: "55/75",
+    totalCandidates: "537"
   });
   const [showCertificate, setShowCertificate] = useState(false);
+  const [previewOpen, setPreviewOpen] = useState(false);
   const [signatureImage, setSignatureImage] = useState<string | undefined>(undefined);
   const [companyLogo, setCompanyLogo] = useState<string | undefined>(undefined);
+  const [internImage, setInternImage] = useState<string | undefined>(undefined);
   const { toast } = useToast();
 
   // Initialize form data when editing an existing certificate
@@ -50,8 +64,16 @@ const CertificateGenerator: React.FC<CertificateGeneratorProps> = ({
         duration: existingCertificate.duration,
         signatoryName: "Ajay Kumar Yadav", // Default values since these aren't stored in DB model
         signatoryPosition: "Tech Instance Coordinator",
-        description: ""
+        description: "",
+        score: existingCertificate.score || "75",
+        assignments: existingCertificate.assignments || "20/25",
+        exam: existingCertificate.exam || "55/75",
+        totalCandidates: existingCertificate.totalCandidates || "537"
       });
+      
+      if (existingCertificate.internImage) {
+        setInternImage(existingCertificate.internImage);
+      }
     }
   }, [existingCertificate, isEditMode]);
 
@@ -85,7 +107,12 @@ const CertificateGenerator: React.FC<CertificateGeneratorProps> = ({
       companyName: formData.companyName,
       duration: formData.duration,
       issueDate: isEditMode && existingCertificate ? existingCertificate.issueDate : new Date().toISOString().split('T')[0],
-      status: isEditMode && existingCertificate ? existingCertificate.status : "Active"
+      status: isEditMode && existingCertificate ? existingCertificate.status : "Active",
+      score: formData.score,
+      assignments: formData.assignments,
+      exam: formData.exam,
+      totalCandidates: formData.totalCandidates,
+      internImage: internImage
     };
 
     if (isEditMode && existingCertificate) {
@@ -176,6 +203,25 @@ const CertificateGenerator: React.FC<CertificateGeneratorProps> = ({
     }
   };
 
+  const handleInternImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      
+      reader.onload = (event) => {
+        if (event.target && typeof event.target.result === 'string') {
+          setInternImage(event.target.result);
+          toast({
+            title: "Intern photo uploaded",
+            description: "Intern photo has been successfully uploaded."
+          });
+        }
+      };
+      
+      reader.readAsDataURL(file);
+    }
+  };
+
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     const options: Intl.DateTimeFormatOptions = { 
@@ -198,7 +244,44 @@ const CertificateGenerator: React.FC<CertificateGeneratorProps> = ({
             isEditMode={isEditMode}
           />
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Preview Button */}
+          <div className="flex justify-end mb-4">
+            <Dialog open={previewOpen} onOpenChange={setPreviewOpen}>
+              <DialogTrigger asChild>
+                <Button variant="outline" className="ml-auto">
+                  Preview Certificate
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-4xl">
+                <DialogHeader>
+                  <DialogTitle>Certificate Preview</DialogTitle>
+                </DialogHeader>
+                <div className="overflow-auto max-h-[80vh]">
+                  <Certificate 
+                    internName={formData.internName || "INTERN NAME"}
+                    internshipProgram={formData.internshipProgram || "INTERNSHIP PROGRAM"}
+                    startDate={formatDate(formData.startDate)}
+                    endDate={formatDate(formData.endDate)}
+                    certificateId={formData.certificateId}
+                    companyName={formData.companyName}
+                    description={formData.description}
+                    duration={formData.duration}
+                    signatoryName={formData.signatoryName}
+                    signatoryPosition={formData.signatoryPosition}
+                    signatureImage={signatureImage}
+                    companyLogo={companyLogo}
+                    internImage={internImage}
+                    score={formData.score}
+                    assignments={formData.assignments}
+                    exam={formData.exam}
+                    totalCandidates={formData.totalCandidates}
+                  />
+                </div>
+              </DialogContent>
+            </Dialog>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Company Logo Upload */}
             <div className="bg-white p-6 rounded-lg shadow-md">
               <h3 className="text-lg font-medium mb-4">Upload Company Logo</h3>
@@ -284,6 +367,103 @@ const CertificateGenerator: React.FC<CertificateGeneratorProps> = ({
                 </div>
               </div>
             </div>
+            
+            {/* Intern Photo Upload */}
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <h3 className="text-lg font-medium mb-4">Upload Intern Photo</h3>
+              <div className="flex items-center gap-4">
+                <div className="w-full">
+                  <Label htmlFor="intern-photo-upload" className="block mb-2">Choose intern photo</Label>
+                  <div className="flex items-center gap-3">
+                    <input
+                      id="intern-photo-upload"
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={handleInternImageUpload}
+                    />
+                    <Button 
+                      type="button" 
+                      variant="outline"
+                      onClick={() => document.getElementById('intern-photo-upload')?.click()}
+                      className="w-1/3"
+                    >
+                      <Upload className="mr-2 h-4 w-4" />
+                      Select File
+                    </Button>
+                    
+                    <div className="border rounded-md h-32 w-24 flex items-center justify-center bg-gray-50">
+                      {internImage ? (
+                        <img 
+                          src={internImage} 
+                          alt="Intern Photo Preview" 
+                          className="max-h-30 max-w-22 object-cover"
+                        />
+                      ) : (
+                        <p className="text-xs text-gray-400">No photo</p>
+                      )}
+                    </div>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-2">
+                    Recommended: Professional headshot
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {/* Additional Certificate Fields */}
+          <div className="bg-white p-6 rounded-lg shadow-md">
+            <h3 className="text-lg font-medium mb-4">Performance Details</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <Label htmlFor="score" className="block mb-2">Overall Score (%)</Label>
+                <Input
+                  id="score"
+                  name="score"
+                  type="text"
+                  value={formData.score}
+                  onChange={handleChange}
+                  className="w-full"
+                />
+              </div>
+              
+              <div>
+                <Label htmlFor="totalCandidates" className="block mb-2">Total Candidates</Label>
+                <Input
+                  id="totalCandidates"
+                  name="totalCandidates"
+                  type="text"
+                  value={formData.totalCandidates}
+                  onChange={handleChange}
+                  className="w-full"
+                />
+              </div>
+              
+              <div>
+                <Label htmlFor="assignments" className="block mb-2">Online Assignments (e.g. 20/25)</Label>
+                <Input
+                  id="assignments"
+                  name="assignments"
+                  type="text"
+                  value={formData.assignments}
+                  onChange={handleChange}
+                  className="w-full"
+                />
+              </div>
+              
+              <div>
+                <Label htmlFor="exam" className="block mb-2">Proctored Exam (e.g. 55/75)</Label>
+                <Input
+                  id="exam"
+                  name="exam"
+                  type="text"
+                  value={formData.exam}
+                  onChange={handleChange}
+                  className="w-full"
+                />
+              </div>
+            </div>
           </div>
         </div>
       ) : (
@@ -309,6 +489,11 @@ const CertificateGenerator: React.FC<CertificateGeneratorProps> = ({
               signatoryPosition={formData.signatoryPosition}
               signatureImage={signatureImage}
               companyLogo={companyLogo}
+              internImage={internImage}
+              score={formData.score}
+              assignments={formData.assignments}
+              exam={formData.exam}
+              totalCandidates={formData.totalCandidates}
             />
           </div>
         </div>
