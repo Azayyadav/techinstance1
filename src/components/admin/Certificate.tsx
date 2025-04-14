@@ -44,7 +44,7 @@ const Certificate: React.FC<CertificateProps> = ({
   customDescription = ""
 }) => {
   // Using custom domain for verification
-  const verificationUrl = `https://www.techinstance.tech/verify?id=${certificateId}`;
+  const verificationUrl = `https://www.techinstance.com/verify?id=${certificateId}`;
   
   return (
     <div className="certificate-container relative bg-white border border-gray-200">
@@ -62,9 +62,8 @@ const Certificate: React.FC<CertificateProps> = ({
         
         <div className="text-center">
           <h1 className="text-3xl md:text-4xl font-bold text-blue-800">
-            TECH INSTANCE INTERNSHIP CERTIFICATION
+            INTERNSHIP CERTIFICATE
           </h1>
-          <p className="text-md text-gray-600">(Tech Instance Professional Development Program)</p>
         </div>
         
         <div className="w-24 h-24">
@@ -158,7 +157,7 @@ const Certificate: React.FC<CertificateProps> = ({
         </div>
         
         <div>
-          <p>TECHINSTANCE.TECH</p>
+          <p>WWW.TECHINSTANCE.COM</p>
         </div>
       </div>
     </div>
