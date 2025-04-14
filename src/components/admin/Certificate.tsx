@@ -39,11 +39,11 @@ const Certificate: React.FC<CertificateProps> = ({
   internImage,
   customDescription = ""
 }) => {
-  // Using custom domain for verification
-  const verificationUrl = `https://techinstance.tech/verify?id=${certificateId}`;
+  // Using custom subdomain for verification
+  const verificationUrl = `https://42f8dfcf-7bf0-4b8a-a2b4-78cb716face3.techinstance.tech/verify?id=${certificateId}`;
   
   return (
-    <div className="certificate-container relative bg-white border border-gray-200">
+    <div className="certificate-container relative bg-white border border-gray-200 shadow-[0_0_15px_rgba(0,0,0,0.1)]">
       {/* Header */}
       <div className="flex justify-between items-center px-10 pt-8 pb-2 border-b border-gray-200">
         <div className="w-24 h-24">

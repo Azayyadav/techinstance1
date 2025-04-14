@@ -46,7 +46,7 @@ const CertificatePreview: React.FC<CertificatePreviewProps> = ({
           Preview Certificate
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-4xl">
+      <DialogContent className="max-w-4xl shadow-lg">
         <DialogHeader>
           <DialogTitle>Certificate Preview</DialogTitle>
         </DialogHeader>
