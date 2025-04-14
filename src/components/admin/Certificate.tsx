@@ -67,11 +67,7 @@ const Certificate: React.FC<CertificateProps> = ({
         </div>
         
         <div className="w-24 h-24">
-          <img 
-            src="/public/lovable-uploads/431b2088-5fbb-4d8b-814c-0dd6642990f8.png" 
-            alt="Skill India" 
-            className="w-full h-full object-contain"
-          />
+          {/* Removed image content */}
         </div>
       </div>
       
