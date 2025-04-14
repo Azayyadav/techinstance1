@@ -22,10 +22,6 @@ interface CertificatePreviewProps {
     duration: string;
     signatoryName: string;
     signatoryPosition: string;
-    score: string;
-    assignments: string;
-    exam: string;
-    totalCandidates: string;
     customDescription: string;
   };
   signatureImage?: string;
@@ -69,10 +65,6 @@ const CertificatePreview: React.FC<CertificatePreviewProps> = ({
             signatureImage={signatureImage}
             companyLogo={companyLogo}
             internImage={internImage}
-            score={formData.score}
-            assignments={formData.assignments}
-            exam={formData.exam}
-            totalCandidates={formData.totalCandidates}
             customDescription={formData.customDescription}
           />
         </div>

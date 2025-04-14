@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -45,12 +44,12 @@ const VerifyCertificate = () => {
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-8">
-            {/* Removed image content */}
+            
             <h1 className="text-3xl font-bold text-blue-700">Certificate Verification</h1>
             <p className="text-gray-600 mt-2">Verify the authenticity of a Tech Instance certificate</p>
           </div>
           
-          <Card className="border-2 shadow-lg overflow-hidden">
+          <Card>
             <div className="bg-gradient-to-r from-blue-500 to-blue-700 h-2"></div>
             <CardHeader className="bg-gray-50 border-b">
               <CardTitle className="text-center text-blue-700">Verification Result</CardTitle>
@@ -72,19 +71,19 @@ const VerifyCertificate = () => {
                   
                   <div className="bg-gray-50 p-6 rounded-lg w-full border">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
-                      <div className="p-3 bg-white rounded-md shadow-sm">
+                      <div className="p-3 bg-white rounded-md">
                         <p className="text-sm text-gray-500 mb-1">Certificate ID</p>
                         <p className="font-medium text-gray-800">{certificate?.id}</p>
                       </div>
-                      <div className="p-3 bg-white rounded-md shadow-sm">
+                      <div className="p-3 bg-white rounded-md">
                         <p className="text-sm text-gray-500 mb-1">Issued To</p>
                         <p className="font-medium text-gray-800">{certificate?.internName}</p>
                       </div>
-                      <div className="p-3 bg-white rounded-md shadow-sm">
+                      <div className="p-3 bg-white rounded-md">
                         <p className="text-sm text-gray-500 mb-1">Program</p>
                         <p className="font-medium text-gray-800">{certificate?.internshipProgram}</p>
                       </div>
-                      <div className="p-3 bg-white rounded-md shadow-sm">
+                      <div className="p-3 bg-white rounded-md">
                         <p className="text-sm text-gray-500 mb-1">Issue Date</p>
                         <p className="font-medium text-gray-800">{new Date(certificate?.issueDate || "").toLocaleDateString('en-US', {
                           day: 'numeric',
@@ -92,7 +91,7 @@ const VerifyCertificate = () => {
                           year: 'numeric'
                         })}</p>
                       </div>
-                      <div className="p-3 bg-white rounded-md shadow-sm">
+                      <div className="p-3 bg-white rounded-md">
                         <p className="text-sm text-gray-500 mb-1">Started On</p>
                         <p className="font-medium text-gray-800">{new Date(certificate?.startDate || "").toLocaleDateString('en-US', {
                           day: 'numeric',
@@ -100,7 +99,7 @@ const VerifyCertificate = () => {
                           year: 'numeric'
                         })}</p>
                       </div>
-                      <div className="p-3 bg-white rounded-md shadow-sm">
+                      <div className="p-3 bg-white rounded-md">
                         <p className="text-sm text-gray-500 mb-1">Completed On</p>
                         <p className="font-medium text-gray-800">{new Date(certificate?.endDate || "").toLocaleDateString('en-US', {
                           day: 'numeric',

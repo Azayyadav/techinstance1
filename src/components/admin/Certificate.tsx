@@ -37,14 +37,10 @@ const Certificate: React.FC<CertificateProps> = ({
   signatureImage,
   companyLogo,
   internImage,
-  score = "",
-  assignments = "",
-  exam = "",
-  totalCandidates = "",
   customDescription = ""
 }) => {
   // Using custom domain for verification
-  const verificationUrl = `https://www.techinstance.com/verify?id=${certificateId}`;
+  const verificationUrl = `https://techinstance.tech/verify?id=${certificateId}`;
   
   return (
     <div className="certificate-container relative bg-white border border-gray-200">
@@ -92,29 +88,6 @@ const Certificate: React.FC<CertificateProps> = ({
           <div className="text-center mb-6 mx-auto max-w-3xl">
             <p className="text-lg leading-relaxed">{customDescription}</p>
           </div>
-        )}
-        
-        {/* Score Section */}
-        {score && (
-          <div className="text-center mb-6">
-            <p className="text-xl italic mb-2">with a consolidated score of <span className="text-3xl font-bold mx-2">{score}</span>%</p>
-            
-            {/* Score Table */}
-            <table className="border-collapse border border-gray-400 mx-auto">
-              <tr>
-                <td className="border border-gray-400 px-6 py-2">Online Assignments</td>
-                <td className="border border-gray-400 px-6 py-2 font-bold">{assignments}</td>
-                <td className="border border-gray-400 px-6 py-2">Proctored Exam</td>
-                <td className="border border-gray-400 px-6 py-2 font-bold">{exam}</td>
-              </tr>
-            </table>
-          </div>
-        )}
-        
-        {totalCandidates && (
-          <p className="text-center text-lg mb-6">
-            Total number of candidates certified in this course: <span className="font-bold">{totalCandidates}</span>
-          </p>
         )}
         
         <div className="flex justify-between w-full mt-4 px-10">
