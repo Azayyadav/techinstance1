@@ -37,13 +37,25 @@ const AdminCertificates = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState<"list" | "create" | "edit">("list");
-  const [certificatesList, setCertificatesList] = useState<Certificate[]>(certificates);
+  const [certificatesList, setCertificatesList] = useState<Certificate[]>([]);
   const [selectedCertificate, setSelectedCertificate] = useState<Certificate | null>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [certificateToDelete, setCertificateToDelete] = useState<string | null>(null);
   
   const { toast } = useToast();
   const navigate = useNavigate();
+
+  // Remove duplicate certificates from the list
+  const removeDuplicates = (certs: Certificate[]): Certificate[] => {
+    const uniqueIds = new Set<string>();
+    return certs.filter(cert => {
+      if (uniqueIds.has(cert.id)) {
+        return false;
+      }
+      uniqueIds.add(cert.id);
+      return true;
+    });
+  };
 
   useEffect(() => {
     // Check if admin is authenticated
@@ -52,6 +64,8 @@ const AdminCertificates = () => {
       navigate("/admin");
     } else {
       setIsAuthenticated(true);
+      // Remove duplicate certificates before setting the list
+      setCertificatesList(removeDuplicates(certificates));
     }
   }, [navigate]);
 
@@ -65,7 +79,7 @@ const AdminCertificates = () => {
   };
 
   const handleViewCertificate = (id: string) => {
-    window.open(`/verify?id=${id}`, '_blank');
+    window.open(`/verify?id=${encodeURIComponent(id)}`, '_blank');
   };
 
   const handleDownloadCertificate = (id: string) => {
@@ -130,7 +144,14 @@ const AdminCertificates = () => {
   );
 
   const onCertificateGenerated = (newCertificate: Certificate) => {
-    setCertificatesList(prev => [...prev, newCertificate]);
+    // Add new certificate without duplicates
+    setCertificatesList(prev => {
+      // First remove any existing certificate with the same ID
+      const filtered = prev.filter(cert => cert.id !== newCertificate.id);
+      // Then add the new certificate
+      return [...filtered, newCertificate];
+    });
+    
     toast({
       title: "Certificate Generated",
       description: `Certificate for ${newCertificate.internName} has been created successfully.`,
@@ -223,7 +244,7 @@ const AdminCertificates = () => {
                   <TableBody>
                     {filteredCertificates.length > 0 ? (
                       filteredCertificates.map((cert) => (
-                        <TableRow key={cert.id}>
+                        <TableRow key={`${cert.id}-${cert.internName}`}>
                           <TableCell className="font-medium">{cert.id}</TableCell>
                           <TableCell>{cert.internName}</TableCell>
                           <TableCell>{cert.internshipProgram}</TableCell>

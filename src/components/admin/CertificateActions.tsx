@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Printer, Download, Share2, FileText, QrCode, Instagram, Facebook, Linkedin, Mail } from "lucide-react";
@@ -83,7 +84,8 @@ const CertificateActions: React.FC<CertificateActionsProps> = ({
   };
 
   const handleCopyVerificationURL = () => {
-    const verificationUrl = `https://techinstance.tech/verify?id=${certificateId}`;
+    // Use current domain until custom domain is set up
+    const verificationUrl = `${window.location.origin}/verify?id=${encodeURIComponent(certificateId)}`;
     
     navigator.clipboard.writeText(verificationUrl).then(() => {
       toast({
@@ -100,7 +102,8 @@ const CertificateActions: React.FC<CertificateActionsProps> = ({
   };
   
   const handleShareToSocial = (platform: string) => {
-    const verificationUrl = `https://techinstance.tech/verify?id=${certificateId}`;
+    // Use current domain until custom domain is set up
+    const verificationUrl = `${window.location.origin}/verify?id=${encodeURIComponent(certificateId)}`;
     
     let shareUrl = '';
     

@@ -81,16 +81,53 @@ export const certificates: Certificate[] = [
     exam: "60/75",
     totalCandidates: "587",
     customDescription: "For successfully completing a 2-month internship from December 1, 2023 to February 1, 2024 in Web Development at Tech Instance, Alex demonstrated strong dedication, technical skills, and valuable contributions to real-world projects."
+  },
+  {
+    id: "TECH-3CMP7H1",
+    internName: "cfg",
+    internshipProgram: "g",
+    startDate: "2024-03-16",
+    endDate: "2024-04-16",
+    companyName: "Tech Instance",
+    duration: "1-month",
+    issueDate: "2024-04-16",
+    status: "Active",
+    score: "75",
+    assignments: "20/25",
+    exam: "55/75",
+    totalCandidates: "537",
+    customDescription: "For successfully completing a 1-month internship in g at Tech Instance, cfg demonstrated strong dedication, technical skills, and valuable contributions to real-world projects."
   }
 ];
 
 // Function to verify a certificate by ID
 export const verifyCertificate = (id: string): Certificate | null => {
-  return certificates.find(cert => cert.id === id) || null;
+  // First, try to find the certificate with exact ID match
+  const certificate = certificates.find(cert => cert.id === id);
+  if (certificate) return certificate;
+  
+  // If not found, try to find by decoding the URL-encoded ID
+  try {
+    const decodedId = decodeURIComponent(id);
+    return certificates.find(cert => cert.id === decodedId);
+  } catch (e) {
+    console.error("Error decoding certificate ID:", e);
+    return null;
+  }
 };
 
 // Function to add a new certificate
 export const addCertificate = (certificate: Certificate): Certificate => {
+  // Check if a certificate with this ID already exists
+  const existingIndex = certificates.findIndex(cert => cert.id === certificate.id);
+  
+  if (existingIndex !== -1) {
+    // Update existing certificate instead of adding a duplicate
+    certificates[existingIndex] = certificate;
+    return certificate;
+  }
+  
+  // Otherwise add as new certificate
   certificates.push(certificate);
   return certificate;
 };

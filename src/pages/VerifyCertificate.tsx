@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -15,16 +16,26 @@ const VerifyCertificate = () => {
   useEffect(() => {
     const performVerification = () => {
       setLoading(true);
+      console.log("Verifying certificate ID:", certificateId);
       
       setTimeout(() => {
         if (certificateId) {
-          const decodedId = decodeURIComponent(certificateId);
-          const foundCertificate = verifyCertificate(decodedId);
-          
-          if (foundCertificate) {
-            setCertificateFound(true);
-            setCertificate(foundCertificate);
-          } else {
+          try {
+            // First try to decode the ID in case it's URL-encoded
+            const decodedId = decodeURIComponent(certificateId);
+            console.log("Decoded certificate ID:", decodedId);
+            
+            const foundCertificate = verifyCertificate(decodedId);
+            console.log("Found certificate:", foundCertificate);
+            
+            if (foundCertificate) {
+              setCertificateFound(true);
+              setCertificate(foundCertificate);
+            } else {
+              setCertificateFound(false);
+            }
+          } catch (error) {
+            console.error("Error verifying certificate:", error);
             setCertificateFound(false);
           }
         } else {
