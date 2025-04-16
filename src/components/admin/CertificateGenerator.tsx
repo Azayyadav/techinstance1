@@ -133,7 +133,9 @@ const CertificateGenerator: React.FC<CertificateGeneratorProps> = ({
     // In a real application, this would show a share dialog
     // For now we'll use the navigator.share API if available
     if (navigator.share) {
-      const verificationUrl = `https://www.techinstance.com/verify?id=${formData.certificateId}`;
+      // Get the current domain for verification
+      const currentDomain = window.location.origin;
+      const verificationUrl = `${currentDomain}/verify?id=${formData.certificateId}`;
       
       navigator.share({
         title: `${formData.internName}'s Tech Instance Certificate`,

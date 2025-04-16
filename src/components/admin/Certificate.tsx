@@ -39,8 +39,8 @@ const Certificate: React.FC<CertificateProps> = ({
   internImage,
   customDescription = ""
 }) => {
-  // Using custom subdomain for verification
-  const verificationUrl = `https://42f8dfcf-7bf0-4b8a-a2b4-78cb716face3.techinstance.tech/verify?id=${certificateId}`;
+  // Using relative URL for verification that works on any domain
+  const verificationUrl = encodeURI(`/verify?id=${certificateId}`);
   
   return (
     <div className="certificate-container relative bg-white border border-gray-200 shadow-[0_0_15px_rgba(0,0,0,0.1)]">
@@ -115,14 +115,16 @@ const Certificate: React.FC<CertificateProps> = ({
         </div>
         
         <div className="flex items-center">
-          <QRCodeCanvas 
-            value={verificationUrl}
-            size={60}
-            bgColor="#ffffff"
-            fgColor="#000000"
-            level="H"
-            includeMargin={false}
-          />
+          <div className="bg-white p-2 rounded-md shadow-lg">
+            <QRCodeCanvas 
+              value={verificationUrl}
+              size={90}
+              bgColor="#ffffff"
+              fgColor="#000000"
+              level="H"
+              includeMargin={true}
+            />
+          </div>
         </div>
         
         <div>

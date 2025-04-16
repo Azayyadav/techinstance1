@@ -89,8 +89,9 @@ const CertificateActions: React.FC<CertificateActionsProps> = ({
   };
 
   const handleCopyVerificationURL = () => {
-    // Using custom subdomain for verification
-    const verificationUrl = `https://42f8dfcf-7bf0-4b8a-a2b4-78cb716face3.techinstance.tech/verify?id=${certificateId}`;
+    // Get the current domain for verification
+    const currentDomain = window.location.origin;
+    const verificationUrl = `${currentDomain}/verify?id=${certificateId}`;
     
     navigator.clipboard.writeText(verificationUrl).then(() => {
       toast({
@@ -107,8 +108,9 @@ const CertificateActions: React.FC<CertificateActionsProps> = ({
   };
   
   const handleShareToSocial = (platform: string) => {
-    // Using custom subdomain for verification
-    const verificationUrl = `https://42f8dfcf-7bf0-4b8a-a2b4-78cb716face3.techinstance.tech/verify?id=${certificateId}`;
+    // Get the current domain for verification
+    const currentDomain = window.location.origin;
+    const verificationUrl = `${currentDomain}/verify?id=${certificateId}`;
     
     let shareUrl = '';
     
