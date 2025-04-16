@@ -44,7 +44,7 @@ const Certificate: React.FC<CertificateProps> = ({
   totalCandidates
 }) => {
   // Using a custom domain for verification that looks professional
-  const verificationUrl = `/verify?id=${encodeURIComponent(certificateId)}`;
+  const verificationUrl = `https://techinstance.com/verify?id=${encodeURIComponent(certificateId)}`;
   
   return (
     <div className="certificate-container relative bg-gradient-to-r from-white to-blue-50 border border-gray-200 shadow-[0_0_20px_rgba(0,0,0,0.15)]">
