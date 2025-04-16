@@ -39,8 +39,8 @@ const Certificate: React.FC<CertificateProps> = ({
   internImage,
   customDescription = ""
 }) => {
-  // Using relative URL for verification that works on any domain
-  const verificationUrl = encodeURI(`/verify?id=${certificateId}`);
+  // Using the custom domain for verification
+  const verificationUrl = `https://techinstance.tech/verify?id=${certificateId}`;
   
   return (
     <div className="certificate-container relative bg-white border border-gray-200 shadow-[0_0_15px_rgba(0,0,0,0.1)]">

@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Printer, Download, Share2, FileText, QrCode, Instagram, Facebook, Linkedin, Mail } from "lucide-react";
@@ -40,23 +39,19 @@ const CertificateActions: React.FC<CertificateActionsProps> = ({
         throw new Error("Certificate element not found");
       }
 
-      // Use html2canvas to create an image of the certificate
       const canvas = await html2canvas(certificateElement as HTMLElement, {
-        scale: 3, // Higher scale for better quality
-        useCORS: true, // Allow loading of cross-origin images
+        scale: 3,
+        useCORS: true,
         logging: false
       });
       
-      // Calculate PDF dimensions (A4 format in landscape)
-      const imgWidth = 297; // A4 width in mm (landscape)
-      const imgHeight = 210; // A4 height in mm (landscape)
+      const imgWidth = 297;
+      const imgHeight = 210;
       
-      // Create PDF document
       const pdf = new jsPDF('landscape', 'mm', 'a4');
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = pdf.internal.pageSize.getHeight();
       
-      // Calculate positioning to center the image
       const ratio = Math.min(pdfWidth / canvas.width, pdfHeight / canvas.height);
       const imgX = (pdfWidth - canvas.width * ratio) / 2;
       const imgY = (pdfHeight - canvas.height * ratio) / 2;
@@ -70,7 +65,6 @@ const CertificateActions: React.FC<CertificateActionsProps> = ({
         canvas.height * ratio
       );
       
-      // Save PDF
       pdf.save(`certificate-${certificateId}.pdf`);
       
       toast({
@@ -89,9 +83,7 @@ const CertificateActions: React.FC<CertificateActionsProps> = ({
   };
 
   const handleCopyVerificationURL = () => {
-    // Get the current domain for verification
-    const currentDomain = window.location.origin;
-    const verificationUrl = `${currentDomain}/verify?id=${certificateId}`;
+    const verificationUrl = `https://techinstance.tech/verify?id=${certificateId}`;
     
     navigator.clipboard.writeText(verificationUrl).then(() => {
       toast({
@@ -108,9 +100,7 @@ const CertificateActions: React.FC<CertificateActionsProps> = ({
   };
   
   const handleShareToSocial = (platform: string) => {
-    // Get the current domain for verification
-    const currentDomain = window.location.origin;
-    const verificationUrl = `${currentDomain}/verify?id=${certificateId}`;
+    const verificationUrl = `https://techinstance.tech/verify?id=${certificateId}`;
     
     let shareUrl = '';
     

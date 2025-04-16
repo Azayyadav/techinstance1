@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,14 +13,13 @@ const VerifyCertificate = () => {
   const certificateId = searchParams.get("id");
 
   useEffect(() => {
-    // In a real application, this would be an API call
     const performVerification = () => {
       setLoading(true);
       
-      // Simulate API delay
       setTimeout(() => {
         if (certificateId) {
-          const foundCertificate = verifyCertificate(certificateId);
+          const decodedId = decodeURIComponent(certificateId);
+          const foundCertificate = verifyCertificate(decodedId);
           
           if (foundCertificate) {
             setCertificateFound(true);
