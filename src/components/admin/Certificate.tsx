@@ -129,7 +129,7 @@ const Certificate: React.FC<CertificateProps> = ({
         </div>
         
         <div>
-          <p>WWW.TECHINSTANCE.COM</p>
+          <p>www.techinstance.tech</p>
         </div>
       </div>
     </div>
