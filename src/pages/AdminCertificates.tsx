@@ -79,7 +79,7 @@ const AdminCertificates = () => {
   };
 
   const handleViewCertificate = (id: string) => {
-    window.open(`/verify?id=${encodeURIComponent(id)}`, '_blank');
+    navigate(`/verify?id=${encodeURIComponent(id)}`);
   };
 
   const handleDownloadCertificate = (id: string) => {
